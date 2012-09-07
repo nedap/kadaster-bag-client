@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+	xmlns:bagVsApdAdo="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:antwoord-APD-ADO="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901"
+	xmlns:vraag-APD-ADO-ID="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901"
+	xmlns:vraag-APD-ADO-Adres="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901"
+	xmlns:fout="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-fout/v20090901"
+	name="BagVsRaadplegenDatumADO_v20090901"
+	targetNamespace="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901">
+	<wsdl:types>
+		<xsd:schema>
+			<xsd:import
+				namespace="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901"
+				schemaLocation="BagvsBevragingenAntwoordberichtApdADO-1.3.xsd" />
+			<xsd:import
+				namespace="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901"
+				schemaLocation="BagvsBevragingenVraagberichtApdADOID-1.3.xsd" />
+			<xsd:import
+				namespace="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-apd/v20090901"
+				schemaLocation="BagvsBevragingenVraagberichtApdADOAdres-1.3.xsd" />
+			<xsd:import
+				namespace="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-fout/v20090901"
+				schemaLocation="ApplicatieFout-1.3.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="opvragenResponse">
+		<wsdl:part element="antwoord-APD-ADO:Antwoordbericht-APD-ADO"
+			name="response" />
+	</wsdl:message>
+	<wsdl:message name="opvragenRequest">
+		<wsdl:part element="vraag-APD-ADO-ID:Vraagbericht-APD-ADO-ID"
+			name="request1" />
+	</wsdl:message>
+	<wsdl:message name="opvragenRequest2">
+		<wsdl:part
+			element="vraag-APD-ADO-Adres:Vraagbericht-APD-ADO-Adres"
+			name="request2" />
+	</wsdl:message>
+	<wsdl:message name="applicatieException">
+		<wsdl:part element="fout:ApplicatieFout" name="fout" />
+	</wsdl:message>
+	<wsdl:portType name="IBagVsRaadplegenDatumADO_v20090901">
+		<wsdl:operation
+			name="opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum">
+			<wsdl:input message="bagVsApdAdo:opvragenRequest" />
+			<wsdl:output message="bagVsApdAdo:opvragenResponse" />
+			<wsdl:fault message="bagVsApdAdo:applicatieException"
+				name="fout" />
+		</wsdl:operation>
+		<wsdl:operation
+			name="zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum">
+			<wsdl:input message="bagVsApdAdo:opvragenRequest2" />
+			<wsdl:output message="bagVsApdAdo:opvragenResponse" />
+			<wsdl:fault message="bagVsApdAdo:applicatieException"
+				name="fout" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="BagVsApdAdoSOAPBinding"
+		type="bagVsApdAdo:IBagVsRaadplegenDatumADO_v20090901">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation
+			name="opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum">
+			<soap:operation
+				soapAction="http://www.kadaster.nl/schemas/Services/BagVsRaadplegenDatumADO_v20090901/opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="fout">
+				<soap:fault name="fout" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation
+			name="zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum">
+			<soap:operation
+				soapAction="http://www.kadaster.nl/schemas/Services/BagVsRaadplegenDatumADO_v20090901/zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum"
+				style="document" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="fout">
+				<soap:fault name="fout" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="BagVsRaadplegenDatumADO_v20090901">
+		<wsdl:port binding="bagVsApdAdo:BagVsApdAdoSOAPBinding"
+			name="BagVsApdAdoHTTPPort">
+			<soap:address
+				location="http://www.baglv.nl/Verstrekkingen/20090901/RaadplegenDatumADO" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
