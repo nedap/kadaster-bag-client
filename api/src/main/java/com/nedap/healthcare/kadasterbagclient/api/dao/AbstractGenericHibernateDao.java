@@ -291,7 +291,8 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     }
 
     /**
-     * TODO - write method description exampleCriteria.
+     * Example criteria will be generated from example instance with possibility of fine tuning using excluded
+     * properties.
      * 
      * @param exampleInstance
      *            T

@@ -51,7 +51,7 @@ class LocationServiceImpl implements LocationServiceHelper {
     private AddressDao locationDao;
 
     @Autowired
-    private IBagVsRaadplegenDatumADOV20090901 clientService = null;
+    private final IBagVsRaadplegenDatumADOV20090901 clientService = null;
 
     @Override
     public AddressDTO getAddress(@NotBlank final String zipCode, @NotBlank final Integer houseNumber)
@@ -118,7 +118,7 @@ class LocationServiceImpl implements LocationServiceHelper {
 
         location.setCountryCode(LocationService.NL_COUNTRY_CODE);
         location.setCreationDate(Calendar.getInstance());
-        // TODO - is this valid combination of params
+
         location.setLatitude(bassel.getA().toString());
         location.setLongitude(bassel.getF().toString());
 
@@ -145,8 +145,8 @@ class LocationServiceImpl implements LocationServiceHelper {
      * @param houseNumber
      * @return
      */
-    private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(String zipCode,
-            Integer houseNumber) {
+    private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(final String zipCode,
+            final Integer houseNumber) {
         APD apd = new APD();
         apd.setGegVarActueel(true);
 

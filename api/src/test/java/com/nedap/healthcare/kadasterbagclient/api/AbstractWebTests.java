@@ -30,10 +30,10 @@ import org.springframework.web.servlet.mvc.AbstractController;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = MockWebApplicationContextLoader.class)
 @Transactional
-public abstract class AbstractWebTests extends AbstractGeoCodingRepositoryTest {
+public abstract class AbstractWebTests extends AbstractKadasterBagClientRepositoryTest {
 
     // Necessary constant tweak
-    static final String TEST_CONTEXT = AbstractGeoCodingRepositoryTest.TEXT_CONTEXT;
+    static final String TEST_CONTEXT = AbstractKadasterBagClientRepositoryTest.TEXT_CONTEXT;
 
     @Autowired
     private DispatcherServlet servlet;

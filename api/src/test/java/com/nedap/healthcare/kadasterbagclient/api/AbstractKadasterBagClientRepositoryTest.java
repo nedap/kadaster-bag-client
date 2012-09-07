@@ -13,11 +13,11 @@ import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
 import eu.execom.testutil.AbstractExecomRepositoryAssert;
 
 /**
- * TODO - add comments
+ * {@link AbstractExecomRepositoryAssert} implementation with specific adjustments for Kadaster Bag Client project.
  * 
  * @author Dusko Vesin
  */
-public abstract class AbstractGeoCodingRepositoryTest extends
+public abstract class AbstractKadasterBagClientRepositoryTest extends
         AbstractExecomRepositoryAssert<AbstractPersistedEntity, Long> {
 
     public static final String TEXT_CONTEXT = "/META-INF/test-context.xml";

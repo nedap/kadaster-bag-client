@@ -6,13 +6,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * TODO - add comments
+ * {@link AbstractKadasterBagClientRepositoryTest} with spring annotation and with transaction suppert.
  * 
  * @author Dusko Vesin
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(AbstractGeoCodingRepositoryTest.TEXT_CONTEXT)
+@ContextConfiguration(AbstractKadasterBagClientRepositoryTest.TEXT_CONTEXT)
 @Transactional
-public abstract class AbstractSpringTest extends AbstractGeoCodingRepositoryTest {
+public abstract class AbstractSpringTest extends AbstractKadasterBagClientRepositoryTest {
 
 }

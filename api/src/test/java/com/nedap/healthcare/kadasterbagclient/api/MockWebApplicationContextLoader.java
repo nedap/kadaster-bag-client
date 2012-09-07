@@ -19,7 +19,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
- * TODO - add comments
+ * Context loader that makes writing controller junits test possible.
  * 
  * @author Dusko Vesin
  */
@@ -60,7 +60,8 @@ public class MockWebApplicationContextLoader extends AbstractContextLoader {
     }
 
     private void prepareWebApplicationContext() throws ServletException {
-        @SuppressWarnings("serial") final DispatcherServlet dispatcherServlet = new DispatcherServlet() {
+        @SuppressWarnings("serial")
+        final DispatcherServlet dispatcherServlet = new DispatcherServlet() {
             @Override
             protected WebApplicationContext createWebApplicationContext(final ApplicationContext parent) {
                 return webApplicationContext;
