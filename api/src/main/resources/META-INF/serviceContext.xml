@@ -13,11 +13,15 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
-	<bean id="clientService"
+	<!-- <bean id="clientService"
 		class="org.sprfr.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
 		<property name="serviceUrl" value="http://host/service" />
 		<property name="serviceInterface"
 			value="nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901" />
+	</bean> -->
+	
+	<bean id="clientService"
+		class="com.nedap.healthcare.kadasterbagclient.service.ServiceImpl">
 	</bean>
 
 </beans>

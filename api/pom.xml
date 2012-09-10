@@ -141,6 +141,7 @@
 			<scope>test</scope>
 		</dependency>
 		
+		
 		<!-- JaxWsServerFactoryBean -->
 	    <dependency>
 	        <groupId>org.apache.cxf</groupId>
@@ -197,14 +198,16 @@
 		<outputDirectory>war/WEB-INF/classes
             </outputDirectory>
 		<plugins>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
+				
 					<webXml>war/WEB-INF/web.xml</webXml>
+					
 					<warSourceExcludes>.gwt-tmp/**</warSourceExcludes>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
