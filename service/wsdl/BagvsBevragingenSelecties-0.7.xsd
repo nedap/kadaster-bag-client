@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Kadaster (Kadaster) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:bagtype="http://www.kadaster.nl/schemas/imbag/imbag-types/v20090901"
+	xmlns:selectie="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-selecties/v20090901"
+	targetNamespace="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-selecties/v20090901"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="0.7">
+	<xs:import
+		namespace="http://www.kadaster.nl/schemas/imbag/imbag-types/v20090901"
+		schemaLocation="BagvsImbagOnderdelen-0.7.xsd" />
+	<xs:complexType name="NUM-postcodeAdres">
+		<xs:sequence>
+			<xs:element name="postcode" type="bagtype:Postcode" />
+			<xs:element name="huisnummer" type="bagtype:Huisnummer" />
+			<xs:element name="huisnummertoevoeging"
+				type="bagtype:Huisnummertoevoeging" minOccurs="0" />
+			<xs:element name="huisletter" type="bagtype:Huisletter"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="NUM-postcodeAdres"
+		type="selectie:NUM-postcodeAdres" />
+	<xs:complexType name="NUM-naamAdres">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element name="woonplaatsnaam"
+					type="bagtype:Objectnaam" />
+				<xs:element name="woonplaatsId"
+					type="bagtype:Woonplaatscode" />
+			</xs:choice>
+			<xs:element name="openbareruimteNaam"
+				type="bagtype:Objectnaam" />
+			<xs:element name="huisnummer" type="bagtype:Huisnummer" />
+			<xs:element name="huisnummertoevoeging"
+				type="bagtype:Huisnummertoevoeging" minOccurs="0" />
+			<xs:element name="huisletter" type="bagtype:Huisletter"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="NUM-naamAdres" type="selectie:NUM-naamAdres" />
+	<xs:complexType name="APD">
+		<xs:sequence>
+			<xs:element name="productcode" type="xs:string"
+				minOccurs="0" />
+			<xs:choice>
+				<xs:sequence>
+					<xs:element name="gegVarActueel" type="xs:boolean"
+						default="0" />
+					<xs:element name="actueelDatum" type="bagtype:Datum"
+						minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>
+								De door het systeem bepaalde en
+								gebruikte peildatum, bij gegevensvariant
+								Actueel. Dit is altijd gelijk aan de
+								datum van de bevraging.
+							</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:sequence>
+					<xs:element name="gegVarPeildatum" type="xs:boolean"
+						default="0" />
+					<xs:element name="peildatum" type="bagtype:Datum" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="APD" type="selectie:APD" />
+	<xs:complexType name="LVC">
+		<xs:sequence>
+			<xs:element name="productcode" type="xs:string"
+				minOccurs="0" />
+			<xs:choice>
+				<xs:element name="gegVarToekomst" type="xs:boolean"
+					default="0" />
+				<xs:sequence>
+					<xs:element name="peildatumVanaf"
+						type="bagtype:Datum" minOccurs="0" />
+					<xs:element name="gegVarLevenscyclus"
+						type="xs:boolean" default="0" />
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="LVC" type="selectie:LVC" />
+	<xs:element name="woonplaatsId" type="bagtype:Woonplaatscode" />
+	<xs:element name="nummeraanduidingId" type="bagtype:Objectnummer" />
+	<xs:element name="openbareruimteId" type="bagtype:Objectnummer" />
+	<xs:element name="standplaatsId" type="bagtype:Objectnummer" />
+	<xs:element name="ligplaatsId" type="bagtype:Objectnummer" />
+	<xs:element name="adresseerbaarobjectId"
+		type="bagtype:Objectnummer" />
+	<xs:element name="verblijfsobjectId" type="bagtype:Objectnummer" />
+	<xs:element name="pandId" type="bagtype:Objectnummer" />
+	<xs:element name="openbareruimteNaam" type="bagtype:Objectnaam" />
+	<xs:element name="woonplaatsNaam" type="bagtype:Objectnaam" />
+	<xs:complexType name="WPL-ID">
+		<xs:sequence>
+			<xs:element ref="selectie:woonplaatsId" maxOccurs="100" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="WPL-ID" type="selectie:WPL-ID" />
+	<xs:element name="OPR-ID" type="selectie:OPR-ID" />
+	<xs:complexType name="OPR-ID">
+		<xs:sequence>
+			<xs:element name="openbareruimteId"
+				type="bagtype:Objectnummer" maxOccurs="100" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NUM-ID">
+		<xs:sequence>
+			<xs:element name="nummeraanduidingId"
+				type="bagtype:Objectnummer" maxOccurs="100" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="NUM-ID" type="selectie:NUM-ID" />
+	<xs:complexType name="ADO-ID">
+		<xs:choice>
+			<xs:choice>
+				<xs:element ref="selectie:standplaatsId"
+					maxOccurs="100" />
+				<xs:element ref="selectie:ligplaatsId" maxOccurs="100" />
+				<xs:element ref="selectie:verblijfsobjectId"
+					maxOccurs="100" />
+			</xs:choice>
+			<xs:element ref="selectie:adresseerbaarobjectId"
+				maxOccurs="100" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="ADO-ID" type="selectie:ADO-ID" />
+	<xs:complexType name="VBO-ID">
+		<xs:sequence>
+			<xs:element name="verblijfsobjectId"
+				type="bagtype:Objectnummer" maxOccurs="100" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="VBO-ID" type="selectie:VBO-ID" />
+	<xs:complexType name="LPL-ID">
+		<xs:sequence>
+			<xs:element name="ligplaatsId" type="bagtype:Objectnummer"
+				maxOccurs="100" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="LPL-ID" type="selectie:LPL-ID" />
+	<xs:complexType name="SPL-ID">
+		<xs:sequence>
+			<xs:element name="standplaatsId" type="bagtype:Objectnummer"
+				maxOccurs="100" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="SPL-ID" type="selectie:SPL-ID" />
+	<xs:complexType name="PND-ID">
+		<xs:sequence>
+			<xs:element name="pandId" type="bagtype:Objectnummer"
+				maxOccurs="100" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="PND-ID" type="selectie:PND-ID" />
+	<xs:complexType name="LVC-ID">
+		<xs:choice>
+			<xs:element ref="selectie:woonplaatsId" />
+			<xs:element ref="selectie:openbareruimteId" />
+			<xs:element ref="selectie:nummeraanduidingId" />
+			<xs:element ref="selectie:verblijfsobjectId" />
+			<xs:element ref="selectie:ligplaatsId" />
+			<xs:element ref="selectie:standplaatsId" />
+			<xs:element ref="selectie:pandId" />
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="LVC-ID" type="selectie:LVC-ID" />
+	<xs:complexType name="WPL-Naam">
+		<xs:sequence>
+			<xs:element name="woonplaatsNaam" type="bagtype:Objectnaam" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="WPL-Naam" type="selectie:WPL-Naam" />
+	<xs:complexType name="OPR-Naam">
+		<xs:sequence>
+			<xs:element name="openbareruimteNaam"
+				type="bagtype:Objectnaam" />
+			<xs:choice>
+				<xs:element ref="selectie:woonplaatsId" />
+				<xs:element ref="selectie:woonplaatsNaam" />
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="OPR-Naam" type="selectie:OPR-Naam" />
+</xs:schema>

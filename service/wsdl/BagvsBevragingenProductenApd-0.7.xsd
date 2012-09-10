@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Kadaster (Kadaster) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:bag="http://www.kadaster.nl/schemas/imbag/apd/v20090901"
+	xmlns:product="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-producten-apd/v20090901"
+	xmlns:bagtype="http://www.kadaster.nl/schemas/imbag/v20090901"
+	targetNamespace="http://www.kadaster.nl/schemas/bag-verstrekkingen/bevragingen-producten-apd/v20090901"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="0.7">
+	<xs:import
+		namespace="http://www.kadaster.nl/schemas/imbag/apd/v20090901"
+		schemaLocation="BagvsImbagApd-0.7.xsd" />
+	<xs:complexType name="_product" abstract="1">
+		<xs:sequence>
+			<xs:element name="productcode" type="xs:string"
+				minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="WPL-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:sequence>
+					<xs:element ref="bag:Woonplaats" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="WPL-product" type="product:WPL-product" />
+	<xs:complexType name="OPR-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:sequence>
+					<xs:element ref="bag:OpenbareRuimte" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="OPR-product" type="product:OPR-product" />
+	<xs:complexType name="NUM-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:sequence>
+					<xs:element ref="bag:Nummeraanduiding" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="NUM-product" type="product:NUM-product" />
+	<xs:complexType name="ADO-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:choice>
+					<xs:element ref="bag:Verblijfsobject" />
+					<xs:element ref="bag:Standplaats" />
+					<xs:element ref="bag:Ligplaats" />
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="ADO-product" type="product:ADO-product" />
+	<xs:complexType name="VBO-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:sequence>
+					<xs:element ref="bag:Verblijfsobject" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="VBO-product" type="product:VBO-product" />
+	<xs:complexType name="PND-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:sequence>
+					<xs:element ref="bag:Pand" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="PND-product" type="product:PND-product" />
+	<xs:complexType name="PND-VBO-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:choice>
+					<xs:element ref="bag:Pand" />
+					<xs:element ref="bag:Verblijfsobject"
+						maxOccurs="unbounded" />
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="PND-VBO-product" type="product:PND-VBO-product" />
+	<xs:complexType name="NUM-ADO-product">
+		<xs:complexContent>
+			<xs:extension base="product:_product">
+				<xs:choice>
+					<xs:element ref="bag:Nummeraanduiding" />
+					<xs:choice>
+						<xs:element ref="bag:Verblijfsobject" />
+						<xs:element ref="bag:Standplaats" />
+						<xs:element ref="bag:Ligplaats" />
+					</xs:choice>
+				</xs:choice>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="NUM-ADO-product" type="product:NUM-ADO-product" />
+</xs:schema>
