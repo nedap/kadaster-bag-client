@@ -25,6 +25,7 @@ import nl.kadaster.schemas.imbag.apd.v20090901.Woonplaats;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.PuntOfVlak;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.Tijdvakgeldigheid;
 
+import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.mortbay.log.Log;
 
 public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
@@ -187,6 +188,19 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         result.setGegVarPeildatum(true);
 
         return result;
+    }
+
+    public static void main(String args[]) throws Exception {
+        ServiceImpl endpoint = new ServiceImpl();
+        JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
+        svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
+        svrFactory.setAddress("http://localhost:9000/serviceTest");
+        svrFactory.setServiceBean(endpoint);
+        svrFactory.create();
+        System.out.println("Server ready...");
+
+        while (true) {
+        }
     }
 
 }

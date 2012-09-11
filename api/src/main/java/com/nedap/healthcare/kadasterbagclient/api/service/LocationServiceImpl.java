@@ -3,6 +3,7 @@ package com.nedap.healthcare.kadasterbagclient.api.service;
 import java.util.Calendar;
 
 import javax.validation.constraints.NotNull;
+import javax.xml.ws.WebServiceException;
 
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.ApplicatieException;
@@ -66,9 +67,15 @@ class LocationServiceImpl implements LocationServiceHelper {
         }
 
         if (location == null) {
-            final AntwoordberichtAPDADO result = clientService
-                    .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(
-                            zipCode, houseNumber));
+            AntwoordberichtAPDADO result = null;
+            try {
+                result = clientService
+                        .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(
+                                zipCode, houseNumber));
+            } catch (WebServiceException ex) {
+                LOGGER.error("Web Service communication error : " + ex.toString());
+                throw new FaildCommunicationWithServer();
+            }
 
             if (result == null || result.getAntwoord().getProducten().getADOProduct().size() == 0) {
                 throw new UnExistingLocation(zipCode, houseNumber);
