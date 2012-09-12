@@ -76,7 +76,7 @@
 						<id>test-service</id>
 						<phase>generate-sources</phase>
 						<configuration>
-							<sourceRoot>${basedir}/target/generated</sourceRoot>
+							<sourceRoot>${basedir}/target/generated-sources</sourceRoot>
 							<wsdlOptions>
 								<wsdlOption>
 									<wsdl>${basedir}/wsdl/BagvsRaadplegenDatumADO-1.3.wsdl</wsdl>
