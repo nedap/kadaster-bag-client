@@ -9,7 +9,6 @@ import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.Antwoord
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.ApplicatieException;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.VraagberichtAPDADOAdres;
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.VraagberichtAPDADOAdres.Vraag;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.APD;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.NUMPostcodeAdres;
 import nl.kadaster.schemas.imbag.apd.v20090901.Verblijfsobject;
@@ -161,7 +160,7 @@ class LocationServiceImpl implements LocationServiceHelper {
         numPostcodeAdres.setHuisnummer(houseNumber);
         numPostcodeAdres.setPostcode(zipCode);
 
-        Vraag vraag = new Vraag();
+        VraagberichtAPDADOAdres.Vraag vraag = new VraagberichtAPDADOAdres.Vraag();
         vraag.setNUMPostcodeAdres(numPostcodeAdres);
         vraag.setAPD(apd);
 

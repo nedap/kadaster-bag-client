@@ -307,23 +307,6 @@ public class Address extends AbstractPersistedEntity {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((countryCode == null) ? 0 : countryCode.hashCode());
-        result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
-        result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
-        result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
-        result = prime * result + ((number == null) ? 0 : number.hashCode());
-        result = prime * result + ((postalCode == null) ? 0 : postalCode.hashCode());
-        result = prime * result + ((street == null) ? 0 : street.hashCode());
-        result = prime * result + ((validFrom == null) ? 0 : validFrom.hashCode());
-        result = prime * result + ((validTo == null) ? 0 : validTo.hashCode());
-        return result;
-    }
-
-    @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
