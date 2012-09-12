@@ -21,6 +21,7 @@ import nl.kadaster.schemas.imbag.apd.v20090901.Woonplaats;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.PuntOfVlak;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.Tijdvakgeldigheid;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,7 +30,11 @@ import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
 import com.nedap.healthcare.kadasterbagclient.api.exception.UnExistingLocation;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
+import com.nedap.healthcare.kadasterbagclient.api.util.BasselCoordinates;
+import com.nedap.healthcare.kadasterbagclient.api.util.CoordinatesConverterUtil;
+import com.nedap.healthcare.kadasterbagclient.api.util.RDCoordinates;
 import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
+import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
 
 import eu.execom.testutil.property.Property;
 
@@ -44,6 +49,13 @@ public class LocationServiceTest extends AbstractSpringTest {
     private LocationServiceHelper locationService;
     @Autowired
     private AddressDao locationDao;
+
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+
+        ServiceImpl.main(null);
+
+    }
 
     /**
      * Testing method {@link LocationServiceHelper#convertAndSave(KadasterLocationDTO)} .
@@ -102,14 +114,17 @@ public class LocationServiceTest extends AbstractSpringTest {
                 .getVerblijfsobject();
 
         // asserting
-        // TODO : fix assertion for GPS
+        RDCoordinates rdc = new RDCoordinates(object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue()
+                .get(0), object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue().get(1));
+        BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(rdc);
+
         assertObject(
                 location,
                 Property.notNull(Address.ID),
                 Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.LATITUDE, location.getLatitude()),
-                Property.changed(Address.LONGITUDE, location.getLongitude()),
+                Property.changed(Address.LATITUDE, bassel.getA().toString()),
+                Property.changed(Address.LONGITUDE, bassel.getF().toString()),
                 Property.changed(Address.NUMBER, object.getGerelateerdeAdressen().getHoofdadres().getHuisnummer()),
                 Property.changed(Address.POSTAL_CODE, object.getGerelateerdeAdressen().getHoofdadres().getPostcode()),
                 Property.changed(Address.VALID_FROM, object.getGerelateerdeAdressen().getHoofdadres()

@@ -196,11 +196,12 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
         svrFactory.setAddress("http://localhost:9000/serviceTest");
         svrFactory.setServiceBean(endpoint);
-        svrFactory.create();
-        System.out.println("Server ready...");
-
-        while (true) {
+        try {
+            svrFactory.create();
+        } catch (RuntimeException re) {
+            // service already started
         }
+        System.out.println("Server ready...");
     }
 
 }

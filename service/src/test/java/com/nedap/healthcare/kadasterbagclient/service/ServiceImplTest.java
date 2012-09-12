@@ -12,7 +12,6 @@ import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.NU
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.NUMPostcodeAdres;
 
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mortbay.log.Log;
@@ -28,17 +27,21 @@ public class ServiceImplTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        ServiceImpl endpoint = new ServiceImpl();
-        JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
-        svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
-        svrFactory.setAddress("http://localhost:9000/service");
-        svrFactory.setServiceBean(endpoint);
-        svrFactory.create();
+
+        ServiceImpl.main(null);
+
+        // ServiceImpl endpoint = new ServiceImpl();
+        // JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
+        // svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
+        // svrFactory.setAddress("http://localhost:9000/service");
+        // svrFactory.setServiceBean(endpoint);
+        // svrFactory.create();
 
         JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
         factory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
-        factory.setAddress("http://localhost:9000/service");
+        factory.setAddress("http://localhost:9000/serviceTest");
         client = (IBagVsRaadplegenDatumADOV20090901) factory.create();
+
     }
 
     /**
