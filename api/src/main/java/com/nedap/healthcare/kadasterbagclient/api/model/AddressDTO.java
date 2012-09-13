@@ -1,4 +1,4 @@
-package com.nedap.healthcare.kadasterbagclient.model;
+package com.nedap.healthcare.kadasterbagclient.api.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

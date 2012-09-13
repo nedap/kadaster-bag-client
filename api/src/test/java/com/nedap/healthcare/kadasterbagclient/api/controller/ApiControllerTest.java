@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.nedap.healthcare.kadasterbagclient.api.AbstractWebTests;
 import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.service.LocationService;
-import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
 
 /**

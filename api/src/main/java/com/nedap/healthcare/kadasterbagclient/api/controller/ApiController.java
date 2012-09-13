@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
 import com.nedap.healthcare.kadasterbagclient.api.exception.UnExistingLocation;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.service.LocationService;
-import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
 
 /**
  * API controller, publish REST services for accessing geo coding data.

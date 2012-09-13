@@ -4,7 +4,7 @@ import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.Antwoord
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901;
 
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
-import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 
 /**
  * {@link LocationService} extension with additional methods that are used inside inside implementation. This interface

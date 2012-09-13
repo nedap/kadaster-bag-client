@@ -7,7 +7,7 @@ import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringTest;
 import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
-import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
 
 import eu.execom.testutil.property.Property;

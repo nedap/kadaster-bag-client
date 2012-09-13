@@ -4,7 +4,7 @@ import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.Applicat
 
 import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
 import com.nedap.healthcare.kadasterbagclient.api.exception.UnExistingLocation;
-import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 
 /**
  * Service that describes set of methods for accessing to location informations.
@@ -32,8 +32,9 @@ public interface LocationService {
      *             is thrown if no location can be found.
      * @throws FaildCommunicationWithServer
      *             is thrown if trouble in communication with Kadaster web service is experienced
-     * @throws ApplicatieException 
+     * @throws ApplicatieException
      */
-    AddressDTO getAddress(String zipCode, Integer houseNumber) throws UnExistingLocation, FaildCommunicationWithServer, ApplicatieException;
+    AddressDTO getAddress(String zipCode, Integer houseNumber) throws UnExistingLocation, FaildCommunicationWithServer,
+            ApplicatieException;
 
 }

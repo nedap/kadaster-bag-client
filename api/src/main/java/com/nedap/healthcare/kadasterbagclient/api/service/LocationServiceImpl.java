@@ -25,10 +25,10 @@ import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
 import com.nedap.healthcare.kadasterbagclient.api.exception.UnExistingLocation;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.util.BasselCoordinates;
 import com.nedap.healthcare.kadasterbagclient.api.util.CoordinatesConverterUtil;
 import com.nedap.healthcare.kadasterbagclient.api.util.RDCoordinates;
-import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
 
 /**
  * {@link LocationServiceHelper} implementation.

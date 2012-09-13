@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.model.AbstractPersistedEntity;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
-import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 
 import eu.execom.testutil.AbstractExecomRepositoryAssert;
 
