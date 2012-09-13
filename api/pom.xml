@@ -160,7 +160,7 @@
 		<resources>
 			<resource>
 				<directory>
-					${basedir}/config/test/${user.name}
+					${basedir}/src/test/resources
 				</directory>
 				<filtering>false</filtering>
 				<includes>
@@ -191,9 +191,6 @@
 			</resource>
 		</resources>
 		<testResources>
-			<testResource>
-				<directory>${basedir}/config/test/${user.name}</directory>
-			</testResource>
 			<testResource>
 				<directory>${basedir}/src/test/resources</directory>
 			</testResource>
