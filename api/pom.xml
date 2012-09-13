@@ -148,6 +148,14 @@
 	        <artifactId>cxf-bundle</artifactId>
 	        <version>${cxf.version}</version>
 	    </dependency>
+	    
+	    
+	    <!-- Joda DateTime -->
+ 		<dependency>
+	 		<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.1</version>
+ 		</dependency>
 
 	</dependencies>
 

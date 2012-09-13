@@ -25,6 +25,9 @@
 			<column name="number" type="INT">
 				<constraints nullable="false" />
 			</column>
+			<column name="numberPostfix" type="VARCHAR(255)">
+				<constraints nullable="false" />
+			</column>
 			<column name="latitude" type="VARCHAR(255)">
 				<constraints nullable="false" />
 			</column>

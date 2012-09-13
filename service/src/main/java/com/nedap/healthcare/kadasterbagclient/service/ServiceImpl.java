@@ -122,8 +122,10 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         numm.setTijdvakgeldigheid(tij);
         if (unique.length() > 0) {
             numm.setHuisnummer(Integer.valueOf(unique));
+            numm.setHuisnummertoevoeging("a" + unique);
         } else {
             numm.setHuisnummer(0);
+            numm.setHuisnummertoevoeging("a");
         }
         numm.setPostcode("postcode" + unique);
 

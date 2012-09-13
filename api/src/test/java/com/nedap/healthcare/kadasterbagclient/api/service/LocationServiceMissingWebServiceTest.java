@@ -51,13 +51,14 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringTest {
 
         assertObject(createdEntity, Property.notNull(Address.ID), Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.NUMBER, number), Property.changed(Address.POSTAL_CODE, postalCode),
-                Property.notNull(Address.LATITUDE), Property.notNull(Address.LONGITUDE),
-                Property.notNull(Address.VALID_FROM), Property.notNull(Address.VALID_TO),
-                Property.notNull(Address.CITY), Property.notNull(Address.STREET));
+                Property.changed(Address.NUMBER, number), Property.notNull(Address.NUMBER_POSTFIX),
+                Property.changed(Address.POSTAL_CODE, postalCode), Property.notNull(Address.LATITUDE),
+                Property.notNull(Address.LONGITUDE), Property.notNull(Address.VALID_FROM),
+                Property.notNull(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
 
         assertObject(locationDto, Property.changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 Property.changed(AddressDTO.NUMBER, createdEntity.getNumber()),
+                Property.changed(AddressDTO.NUMBER_POSTFIX, createdEntity.getNumberPostfix()),
                 Property.changed(AddressDTO.POSTAL_CODE, createdEntity.getPostalCode()),
                 Property.changed(AddressDTO.LATITUDE, createdEntity.getLatitude()),
                 Property.changed(AddressDTO.LONGITUDE, createdEntity.getLongitude()),

@@ -27,6 +27,7 @@ import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.service.LocationService;
 import com.nedap.healthcare.kadasterbagclient.model.AddressDTO;
+import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
 
 /**
  * Testing api controller functionalities.
@@ -41,10 +42,12 @@ public class ApiControllerTest extends AbstractWebTests {
     private AddressDao locationDao;
 
     @Before
-    public void setJaxb() throws JAXBException {
+    public void setJaxb() throws Exception {
         final JAXBContext jc = JAXBContext.newInstance(AddressDTO.class);
         // Create unmarshaller
         um = jc.createUnmarshaller();
+
+        ServiceImpl.main(null);
     }
 
     /**
@@ -86,11 +89,13 @@ public class ApiControllerTest extends AbstractWebTests {
 
         assertObject(createdEntity, notNull(Address.ID), notNull(Address.CREATION_DATE),
                 changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                changed(Address.POSTAL_CODE, zipCode), notNull(Address.LATITUDE), notNull(Address.LONGITUDE),
-                notNull(Address.VALID_FROM), notNull(Address.VALID_TO), notNull(Address.CITY), notNull(Address.STREET));
+                notNull(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode), notNull(Address.LATITUDE),
+                notNull(Address.LONGITUDE), notNull(Address.VALID_FROM), notNull(Address.VALID_TO),
+                notNull(Address.CITY), notNull(Address.STREET));
 
         assertObject(locationDto, changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 changed(AddressDTO.NUMBER, createdEntity.getNumber()),
+                changed(AddressDTO.NUMBER_POSTFIX, createdEntity.getNumberPostfix()),
                 changed(AddressDTO.POSTAL_CODE, createdEntity.getPostalCode()),
                 changed(AddressDTO.LATITUDE, createdEntity.getLatitude()),
                 changed(AddressDTO.LONGITUDE, createdEntity.getLongitude()),
@@ -230,12 +235,13 @@ public class ApiControllerTest extends AbstractWebTests {
 
         assertObject(createdEntity, notNull(Address.ID),
                 changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                changed(Address.POSTAL_CODE, zipCode), notNull(Address.CREATION_DATE), notNull(Address.LATITUDE),
-                notNull(Address.LONGITUDE), notNull(Address.VALID_FROM), notNull(Address.VALID_TO),
-                notNull(Address.CITY), notNull(Address.STREET));
+                notNull(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode), notNull(Address.CREATION_DATE),
+                notNull(Address.LATITUDE), notNull(Address.LONGITUDE), notNull(Address.VALID_FROM),
+                notNull(Address.VALID_TO), notNull(Address.CITY), notNull(Address.STREET));
 
         assertObject(locationDto, changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 changed(AddressDTO.NUMBER, createdEntity.getNumber()),
+                changed(AddressDTO.NUMBER_POSTFIX, createdEntity.getNumberPostfix()),
                 changed(AddressDTO.POSTAL_CODE, createdEntity.getPostalCode()),
                 changed(AddressDTO.LATITUDE, createdEntity.getLatitude()),
                 changed(AddressDTO.LONGITUDE, createdEntity.getLongitude()),

@@ -73,6 +73,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         Nummeraanduiding numm1 = new Nummeraanduiding();
         numm1.setTijdvakgeldigheid(tij1);
         numm1.setHuisnummer(1);
+        numm1.setHuisnummertoevoeging("a1");
         numm1.setPostcode("postcode1");
         Woonplaats woonplaats = new Woonplaats();
         woonplaats.setWoonplaatsNaam("city");
@@ -126,6 +127,8 @@ public class LocationServiceTest extends AbstractSpringTest {
                 Property.changed(Address.LATITUDE, bassel.getA().toString()),
                 Property.changed(Address.LONGITUDE, bassel.getF().toString()),
                 Property.changed(Address.NUMBER, object.getGerelateerdeAdressen().getHoofdadres().getHuisnummer()),
+                Property.changed(Address.NUMBER_POSTFIX, object.getGerelateerdeAdressen().getHoofdadres()
+                        .getHuisnummertoevoeging()),
                 Property.changed(Address.POSTAL_CODE, object.getGerelateerdeAdressen().getHoofdadres().getPostcode()),
                 Property.changed(Address.VALID_FROM, object.getGerelateerdeAdressen().getHoofdadres()
                         .getTijdvakgeldigheid().getBegindatumTijdvakGeldigheid()),
@@ -149,6 +152,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         kadasterLocation.setLatitude("latitude");
         kadasterLocation.setLongitude("longitude");
         kadasterLocation.setNumber(3);
+        kadasterLocation.setNumberPostfix("c");
         kadasterLocation.setPostalCode("postalCode");
         kadasterLocation.setValidFrom("20120512000000");
         kadasterLocation.setValidTo("20121012000000");
@@ -165,6 +169,7 @@ public class LocationServiceTest extends AbstractSpringTest {
                 Property.changed(AddressDTO.LATITUDE, kadasterLocation.getLatitude()),
                 Property.changed(AddressDTO.LONGITUDE, kadasterLocation.getLongitude()),
                 Property.changed(AddressDTO.NUMBER, kadasterLocation.getNumber()),
+                Property.changed(AddressDTO.NUMBER_POSTFIX, kadasterLocation.getNumberPostfix()),
                 Property.changed(AddressDTO.POSTAL_CODE, kadasterLocation.getPostalCode()),
                 Property.changed(AddressDTO.VALID_FROM, kadasterLocation.getValidFrom()),
                 Property.changed(AddressDTO.VALID_TO, kadasterLocation.getValidTo()),
@@ -198,13 +203,14 @@ public class LocationServiceTest extends AbstractSpringTest {
 
         assertObject(createdEntity, Property.notNull(Address.ID), Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.NUMBER, number), Property.changed(Address.POSTAL_CODE, postalCode),
-                Property.notNull(Address.LATITUDE), Property.notNull(Address.LONGITUDE),
-                Property.notNull(Address.VALID_FROM), Property.notNull(Address.VALID_TO),
-                Property.notNull(Address.CITY), Property.notNull(Address.STREET));
+                Property.changed(Address.NUMBER, number), Property.notNull(Address.NUMBER_POSTFIX),
+                Property.changed(Address.POSTAL_CODE, postalCode), Property.notNull(Address.LATITUDE),
+                Property.notNull(Address.LONGITUDE), Property.notNull(Address.VALID_FROM),
+                Property.notNull(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
 
         assertObject(locationDto, Property.changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 Property.changed(AddressDTO.NUMBER, createdEntity.getNumber()),
+                Property.changed(AddressDTO.NUMBER_POSTFIX, createdEntity.getNumberPostfix()),
                 Property.changed(AddressDTO.POSTAL_CODE, createdEntity.getPostalCode()),
                 Property.changed(AddressDTO.LATITUDE, createdEntity.getLatitude()),
                 Property.changed(AddressDTO.LONGITUDE, createdEntity.getLongitude()),
@@ -234,6 +240,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         final Address location = new Address();
         location.setCountryCode(LocationServiceHelper.NL_COUNTRY_CODE);
         location.setNumber(number);
+        location.setNumberPostfix("c");
         location.setPostalCode(postalCode);
         location.setLatitude("latitude");
         location.setLongitude("longitude");
@@ -253,6 +260,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         // asserting
         assertObject(locationDto, Property.changed(AddressDTO.COUNTRY_CODE, location.getCountryCode()),
                 Property.changed(AddressDTO.NUMBER, location.getNumber()),
+                Property.changed(AddressDTO.NUMBER_POSTFIX, location.getNumberPostfix()),
                 Property.changed(AddressDTO.POSTAL_CODE, location.getPostalCode()),
                 Property.changed(AddressDTO.LATITUDE, location.getLatitude()),
                 Property.changed(AddressDTO.LONGITUDE, location.getLongitude()),
@@ -282,6 +290,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         final Address location = new Address();
         location.setCountryCode(LocationServiceHelper.NL_COUNTRY_CODE);
         location.setNumber(number);
+        location.setNumberPostfix("c");
         location.setPostalCode(postalCode);
         location.setLatitude("latitude");
         location.setLongitude("longitude");
@@ -306,13 +315,14 @@ public class LocationServiceTest extends AbstractSpringTest {
 
         assertObject(createdEntity, Property.notNull(Address.ID), Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.NUMBER, number), Property.changed(Address.POSTAL_CODE, postalCode),
-                Property.notNull(Address.LATITUDE), Property.notNull(Address.LONGITUDE),
-                Property.notNull(Address.VALID_FROM), Property.notNull(Address.VALID_TO),
-                Property.notNull(Address.CITY), Property.notNull(Address.STREET));
+                Property.changed(Address.NUMBER, number), Property.notNull(Address.NUMBER_POSTFIX),
+                Property.changed(Address.POSTAL_CODE, postalCode), Property.notNull(Address.LATITUDE),
+                Property.notNull(Address.LONGITUDE), Property.notNull(Address.VALID_FROM),
+                Property.notNull(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
 
         assertObject(locationDto, Property.changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 Property.changed(AddressDTO.NUMBER, createdEntity.getNumber()),
+                Property.changed(AddressDTO.NUMBER_POSTFIX, createdEntity.getNumberPostfix()),
                 Property.changed(AddressDTO.POSTAL_CODE, createdEntity.getPostalCode()),
                 Property.changed(AddressDTO.LATITUDE, createdEntity.getLatitude()),
                 Property.changed(AddressDTO.LONGITUDE, createdEntity.getLongitude()),
@@ -366,6 +376,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         location.setLatitude("latitude");
         location.setLongitude("longitude");
         location.setNumber(3);
+        location.setNumberPostfix("a");
         location.setPostalCode("postalCode");
         location.setValidFrom("20120512000000");
         location.setValidTo("20120912000000");
@@ -396,6 +407,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         location.setLatitude("latitude");
         location.setLongitude("longitude");
         location.setNumber(3);
+        location.setNumberPostfix("c");
         location.setPostalCode("postalCode");
         location.setValidFrom("20120512000000");
         location.setValidTo("20120912000000");

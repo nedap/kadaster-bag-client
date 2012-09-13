@@ -44,6 +44,11 @@ public class Address extends AbstractPersistedEntity {
     private Integer number;
     public static final String NUMBER = "number";
 
+    /** House number postfix. */
+    @Column(nullable = false)
+    private String numberPostfix;
+    public static final String NUMBER_POSTFIX = "numberPostfix";
+
     /** GPS latitude. */
     @Column(nullable = false)
     private String latitude;
@@ -85,6 +90,8 @@ public class Address extends AbstractPersistedEntity {
      *            the postal code
      * @param number
      *            the number
+     * @param numberPostfix
+     *            the number postfix
      * @param latitude
      *            the latitude
      * @param longitude
@@ -96,12 +103,14 @@ public class Address extends AbstractPersistedEntity {
      * @param creationDate
      *            the creation date
      */
-    public Address(final String countryCode, final String postalCode, final Integer number, final String latitude,
-            final String longitude, final String validFrom, final String validTo, final Calendar creationDate) {
+    public Address(final String countryCode, final String postalCode, final Integer number, final String numberPostfix,
+            final String latitude, final String longitude, final String validFrom, final String validTo,
+            final Calendar creationDate) {
         super();
         this.countryCode = countryCode;
         this.postalCode = postalCode;
         this.number = number;
+        this.numberPostfix = numberPostfix;
         this.latitude = latitude;
         this.longitude = longitude;
         this.validFrom = validFrom;
@@ -164,6 +173,25 @@ public class Address extends AbstractPersistedEntity {
      */
     public void setNumber(final Integer number) {
         this.number = number;
+    }
+
+    /**
+     * Gets the number postfix.
+     * 
+     * @return the number postfix
+     */
+    public String getNumberPostfix() {
+        return numberPostfix;
+    }
+
+    /**
+     * Sets the number postfix.
+     * 
+     * @param number
+     *            the new number postfix
+     */
+    public void setNumberPostfix(final String numberPostfix) {
+        this.numberPostfix = numberPostfix;
     }
 
     /**
@@ -302,8 +330,9 @@ public class Address extends AbstractPersistedEntity {
     @Override
     public String toString() {
         return "Address [countryCode=" + countryCode + ", postalCode=" + postalCode + ", city=" + city + ", street="
-                + street + ", number=" + number + ", latitude=" + latitude + ", longitude=" + longitude
-                + ", validFrom=" + validFrom + ", validTo=" + validTo + ", creationDate=" + creationDate + "]";
+                + street + ", number=" + number + ", numberPostfix=" + numberPostfix + ", latitude=" + latitude
+                + ", longitude=" + longitude + ", validFrom=" + validFrom + ", validTo=" + validTo + ", creationDate="
+                + creationDate + "]";
     }
 
     @Override

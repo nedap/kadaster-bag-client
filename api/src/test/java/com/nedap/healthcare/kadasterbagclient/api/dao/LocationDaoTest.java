@@ -190,9 +190,11 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         address.setLatitude("latitude" + unique);
         address.setLongitude("longitude" + unique);
         if (unique.length() > 0) {
-        	address.setNumber(Integer.valueOf(unique));
+            address.setNumber(Integer.valueOf(unique));
+            address.setNumberPostfix("a" + unique);
         } else {
-        	address.setNumber(0);
+            address.setNumber(0);
+            address.setNumberPostfix("a");
         }
         address.setPostalCode("postalCode" + unique);
         address.setStreet("street");

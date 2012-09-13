@@ -103,6 +103,7 @@ class LocationServiceImpl implements LocationServiceHelper {
         locationDTO.setLatitude(location.getLatitude());
         locationDTO.setLongitude(location.getLongitude());
         locationDTO.setNumber(location.getNumber());
+        locationDTO.setNumberPostfix(location.getNumberPostfix());
         locationDTO.setPostalCode(location.getPostalCode());
         locationDTO.setValidFrom(location.getValidFrom());
         locationDTO.setValidTo(location.getValidTo());
@@ -133,6 +134,7 @@ class LocationServiceImpl implements LocationServiceHelper {
         location.setValidTo(object.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
                 .getEinddatumTijdvakGeldigheid());
         location.setNumber(object.getGerelateerdeAdressen().getHoofdadres().getHuisnummer());
+        location.setNumberPostfix(object.getGerelateerdeAdressen().getHoofdadres().getHuisnummertoevoeging());
         location.setPostalCode(object.getGerelateerdeAdressen().getHoofdadres().getPostcode());
         location.setCity(object.getGerelateerdeAdressen().getHoofdadres().getGerelateerdeWoonplaats()
                 .getWoonplaatsNaam());

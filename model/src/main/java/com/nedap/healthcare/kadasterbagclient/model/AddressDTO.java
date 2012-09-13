@@ -25,6 +25,10 @@ public class AddressDTO {
     private Integer number;
     public final static String NUMBER = "number";
 
+    /** House number postfix */
+    private String numberPostfix;
+    public final static String NUMBER_POSTFIX = "numberPostfix";
+
     /** GPS latitude */
     private String latitude;
     public final static String LATITUDE = "latitude";
@@ -59,6 +63,14 @@ public class AddressDTO {
 
     public Integer getNumber() {
         return number;
+    }
+
+    public String getNumberPostfix() {
+        return numberPostfix;
+    }
+
+    public void setNumberPostfix(final String numberPostfix) {
+        this.numberPostfix = numberPostfix;
     }
 
     public void setNumber(final Integer number) {
