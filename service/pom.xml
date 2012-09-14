@@ -64,13 +64,14 @@
 					<compilerVersion>${java.version}</compilerVersion>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-codegen-plugin</artifactId>
-				<version>${cxf.version}</version>
+				<version>2.6.1</version>
 				<executions>
 					<execution>
 						<id>test-service</id>

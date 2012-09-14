@@ -19,10 +19,11 @@
 		<slf4j.version>1.5.10</slf4j.version>
 		<junit.version>4.8.2</junit.version>
 		<cxf.version>2.2.9</cxf.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
-		
+
 		<dependency>
 			<groupId>com.nedap.healthcare.kadasterbagclient</groupId>
 			<artifactId>service</artifactId>
@@ -72,10 +73,10 @@
 			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
-		     <groupId>org.hibernate</groupId>
-		     <artifactId>hibernate-validator</artifactId>
-		     <version>4.2.0.Final</version>
-	    </dependency>	
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
@@ -88,7 +89,7 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-		
+
 		<!-- MySQL database driver -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -135,22 +136,22 @@
 			<artifactId>testutil</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		
+
+
 		<!-- JaxWsServerFactoryBean -->
-	    <dependency>
-	        <groupId>org.apache.cxf</groupId>
-	        <artifactId>cxf-bundle</artifactId>
-	        <version>${cxf.version}</version>
-	    </dependency>
-	    
-	    
-	    <!-- Joda DateTime -->
- 		<dependency>
-	 		<groupId>joda-time</groupId>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-bundle</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+
+
+		<!-- Joda DateTime -->
+		<dependency>
+			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 			<version>2.1</version>
- 		</dependency>
+		</dependency>
 
 	</dependencies>
 
@@ -208,6 +209,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
@@ -223,6 +225,8 @@
 					</connectors>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
+
 </project>
