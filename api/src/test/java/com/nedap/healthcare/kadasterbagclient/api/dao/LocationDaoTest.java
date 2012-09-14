@@ -1,8 +1,8 @@
 package com.nedap.healthcare.kadasterbagclient.api.dao;
 
-import java.util.Calendar;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -201,7 +201,7 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         address.setCity("city");
         address.setValidFrom("20120512000000");
         address.setValidTo("20120912000000");
-        address.setCreationDate(Calendar.getInstance());
+        address.setCreationDate(new DateTime());
         return address;
     }
 }

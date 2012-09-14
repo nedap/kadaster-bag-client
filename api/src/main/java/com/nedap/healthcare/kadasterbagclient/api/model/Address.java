@@ -1,11 +1,12 @@
 package com.nedap.healthcare.kadasterbagclient.api.model;
 
-import java.util.Calendar;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 
 /**
  * Address entity is used to pre cache data collected from kadaster web service.
@@ -71,7 +72,8 @@ public class Address extends AbstractPersistedEntity {
 
     /** The creation date. */
     @Column(nullable = false)
-    private Calendar creationDate;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime creationDate;
     public static final String CREATION_DATE = "creationDate";
 
     /**
@@ -105,7 +107,8 @@ public class Address extends AbstractPersistedEntity {
      */
     public Address(final String countryCode, final String postalCode, final Integer number, final String numberPostfix,
             final String latitude, final String longitude, final String validFrom, final String validTo,
-            final Calendar creationDate) {
+            final DateTime creationDate) {
+
         super();
         this.countryCode = countryCode;
         this.postalCode = postalCode;
@@ -275,7 +278,7 @@ public class Address extends AbstractPersistedEntity {
      * 
      * @return the creation date
      */
-    public Calendar getCreationDate() {
+    public DateTime getCreationDate() {
         return creationDate;
     }
 
@@ -285,7 +288,7 @@ public class Address extends AbstractPersistedEntity {
      * @param creationDate
      *            the new creation date
      */
-    public void setCreationDate(final Calendar creationDate) {
+    public void setCreationDate(final DateTime creationDate) {
         this.creationDate = creationDate;
     }
 

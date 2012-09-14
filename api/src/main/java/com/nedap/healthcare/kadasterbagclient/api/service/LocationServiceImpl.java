@@ -1,7 +1,5 @@
 package com.nedap.healthcare.kadasterbagclient.api.service;
 
-import java.util.Calendar;
-
 import javax.validation.constraints.NotNull;
 import javax.xml.ws.WebServiceException;
 
@@ -14,6 +12,7 @@ import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.NU
 import nl.kadaster.schemas.imbag.apd.v20090901.Verblijfsobject;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +87,8 @@ class LocationServiceImpl implements LocationServiceHelper {
 
     @Override
     public boolean isExpired(@NotNull final Address location) {
-        final Long creationTime = location.getCreationDate().getTimeInMillis();
-        final Long currentTime = Calendar.getInstance().getTimeInMillis();
+        final Long creationTime = location.getCreationDate().getMillis();
+        final Long currentTime = new DateTime().getMillis();
 
         final Long difference = currentTime - creationTime;
         return difference > maxValidPeriod * 1000;
@@ -124,7 +123,7 @@ class LocationServiceImpl implements LocationServiceHelper {
         BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(rdc);
 
         location.setCountryCode(LocationService.NL_COUNTRY_CODE);
-        location.setCreationDate(Calendar.getInstance());
+        location.setCreationDate(new DateTime());
 
         location.setLatitude(bassel.getA().toString());
         location.setLongitude(bassel.getF().toString());

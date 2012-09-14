@@ -6,13 +6,13 @@ import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.nedap.healthcare.kadasterbagclient.api.model.AbstractPersistedEntity;
 
@@ -23,8 +23,7 @@ import com.nedap.healthcare.kadasterbagclient.api.model.AbstractPersistedEntity;
  * @param <T>
  *            type of the persisted entity this DAO will handle
  */
-public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEntity> extends HibernateDaoSupport
-        implements GenericDao<T> {
+public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEntity> implements GenericDao<T> {
 
     /**
      * Path separator for hibernate aliases. Value: {@value DOT}
@@ -36,6 +35,9 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     protected static final String PERCENT = "%";
 
     private final Class<T> persistentClass;
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     /**
      * Default constructor.
@@ -55,21 +57,10 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
         return persistentClass;
     }
 
-    /**
-     * Setting session factory from spring.
-     * 
-     * @param sessionFactory
-     *            active session factory
-     */
-    @Autowired
-    public void setDaoSessionFactory(final SessionFactory sessionFactory) {
-        super.setSessionFactory(sessionFactory);
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public T findById(final Long id) {
-        return (T) getSession().get(getPersistentClass(), id);
+        return (T) getCurrentSession().get(getPersistentClass(), id);
     }
 
     /**
@@ -79,7 +70,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @Override
     public void save(final T entity) {
-        getSession().save(entity);
+        getCurrentSession().save(entity);
     }
 
     /**
@@ -89,7 +80,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @Override
     public void update(final T entity) {
-        getSession().update(entity);
+        getCurrentSession().update(entity);
     }
 
     /**
@@ -99,7 +90,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @Override
     public void saveOrUpdate(final T entity) {
-        getSession().saveOrUpdate(merge(entity));
+        getCurrentSession().saveOrUpdate(merge(entity));
     }
 
     /**
@@ -111,7 +102,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     @SuppressWarnings("unchecked")
     @Override
     public T merge(final T entity) {
-        return (T) getSession().merge(entity);
+        return (T) getCurrentSession().merge(entity);
     }
 
     /**
@@ -121,7 +112,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @Override
     public void delete(final T entity) {
-        getSession().delete(entity);
+        getCurrentSession().delete(entity);
     }
 
     /**
@@ -131,7 +122,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @Override
     public void deleteById(final Long id) {
-        getSession().delete(findById(id));
+        getCurrentSession().delete(findById(id));
     }
 
     /**
@@ -152,7 +143,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @SuppressWarnings("unchecked")
     protected List<T> findByCriteria(final Criterion... criterion) {
-        final Criteria crit = getSession().createCriteria(getPersistentClass());
+        final Criteria crit = getCurrentSession().createCriteria(getPersistentClass());
         for (final Criterion c : criterion) {
             crit.add(c);
         }
@@ -168,7 +159,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @SuppressWarnings("unchecked")
     protected T findByCriteriaUnique(final Criterion... criterion) {
-        final Criteria crit = getSession().createCriteria(getPersistentClass());
+        final Criteria crit = getCurrentSession().createCriteria(getPersistentClass());
         for (final Criterion c : criterion) {
             crit.add(c);
         }
@@ -184,7 +175,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      */
     @SuppressWarnings("unchecked")
     protected T findUniqueByCriteria(final Criterion... criterion) {
-        final Criteria crit = getSession().createCriteria(getPersistentClass());
+        final Criteria crit = getCurrentSession().createCriteria(getPersistentClass());
         for (final Criterion c : criterion) {
             crit.add(c);
         }
@@ -200,7 +191,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     @SuppressWarnings("unchecked")
     @Override
     public List<T> findByCriteria(final Map<?, ?> criterias) {
-        final Criteria criteria = getSession().createCriteria(getPersistentClass());
+        final Criteria criteria = getCurrentSession().createCriteria(getPersistentClass());
         criteria.add(Restrictions.allEq(criterias));
         return criteria.list();
     }
@@ -215,7 +206,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      * @return int
      */
     protected int executeQuery(final String query, final String[] namedParams, final Object[] params) {
-        final Query q = getSession().createQuery(query);
+        final Query q = getCurrentSession().createQuery(query);
 
         if (namedParams != null) {
             for (int i = 0; i < namedParams.length; i++) {
@@ -250,7 +241,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
      * @return int
      */
     protected int executeNamedQuery(final String namedQuery, final String[] namedParams, final Object[] params) {
-        final Query q = getSession().getNamedQuery(namedQuery);
+        final Query q = getCurrentSession().getNamedQuery(namedQuery);
 
         if (namedParams != null) {
             for (int i = 0; i < namedParams.length; i++) {
@@ -284,7 +275,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     @Override
     @SuppressWarnings("unchecked")
     public List<T> findByExample(final T exampleInstance, final String[] excludeProperty) {
-        final Criteria crit = getSession().createCriteria(getPersistentClass());
+        final Criteria crit = getCurrentSession().createCriteria(getPersistentClass());
         final Example example = exampleCriteria(exampleInstance, excludeProperty);
         crit.add(example);
         return crit.list();
@@ -319,6 +310,10 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
         if (example != null) {
             criteria.add(exampleCriteria(example, excludeProperty));
         }
+    }
+
+    protected final Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
     }
 
     /**
