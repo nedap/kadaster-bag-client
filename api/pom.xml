@@ -15,7 +15,7 @@
 
 	<properties>
 		<spring.version>3.1.2.RELEASE</spring.version>
-		<hibernate.version>3.5.1-Final</hibernate.version>
+		<hibernate.version>4.1.6.Final</hibernate.version>
 		<slf4j.version>1.5.10</slf4j.version>
 		<junit.version>4.8.2</junit.version>
 		<cxf.version>2.2.9</cxf.version>
@@ -27,16 +27,29 @@
 			<groupId>com.nedap.healthcare.kadasterbagclient</groupId>
 			<artifactId>model</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.nedap.healthcare.kadasterbagclient</groupId>
 			<artifactId>service</artifactId>
 		</dependency>
 
+		<!-- Joda time dependencies -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.jodatime</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
+			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 
@@ -68,23 +81,13 @@
 		<!-- DATA ACCESS DEPENDENCIES -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<version>${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
 		<dependency>
-		     <groupId>org.hibernate</groupId>
-		     <artifactId>hibernate-validator</artifactId>
-		     <version>4.2.0.Final</version>
-	    </dependency>	
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
 		</dependency>
 
 		<!-- DB -->
@@ -93,7 +96,7 @@
 			<artifactId>c3p0</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-		
+
 		<!-- MySQL database driver -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -140,14 +143,14 @@
 			<artifactId>testutil</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
-		
+
+
 		<!-- JaxWsServerFactoryBean -->
-	    <dependency>
-	        <groupId>org.apache.cxf</groupId>
-	        <artifactId>cxf-bundle</artifactId>
-	        <version>${cxf.version}</version>
-	    </dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-bundle</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
 
 	</dependencies>
 

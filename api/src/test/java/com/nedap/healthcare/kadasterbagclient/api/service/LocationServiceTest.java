@@ -1,7 +1,5 @@
 package com.nedap.healthcare.kadasterbagclient.api.service;
 
-import java.util.Calendar;
-
 import net.opengis.gml.DirectPositionType;
 import net.opengis.gml.PointType;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
@@ -21,6 +19,7 @@ import nl.kadaster.schemas.imbag.apd.v20090901.Woonplaats;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.PuntOfVlak;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.Tijdvakgeldigheid;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -213,8 +212,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         // data preparation
         final String postalCode = "postcode3";
         final int number = 3;
-        final Calendar creationDate = Calendar.getInstance();
-        creationDate.add(Calendar.SECOND, -locationService.getMaxValidPeriod() + 5);
+        final DateTime creationDate = new DateTime().plusSeconds(-locationService.getMaxValidPeriod() + 5);
 
         final Address location = new Address();
         location.setCountryCode(LocationServiceHelper.NL_COUNTRY_CODE);
@@ -261,8 +259,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         // data preparation
         final String postalCode = "postcode3";
         final int number = 3;
-        final Calendar creationDate = Calendar.getInstance();
-        creationDate.add(Calendar.SECOND, -locationService.getMaxValidPeriod() - 5);
+        final DateTime creationDate = new DateTime().plusSeconds(-locationService.getMaxValidPeriod() - 5);
 
         final Address location = new Address();
         location.setCountryCode(LocationServiceHelper.NL_COUNTRY_CODE);
@@ -343,8 +340,7 @@ public class LocationServiceTest extends AbstractSpringTest {
     public void testIsExpiredWithExpiredLocation() {
 
         // data preparation
-        final Calendar creationDate = Calendar.getInstance();
-        creationDate.add(Calendar.SECOND, -locationService.getMaxValidPeriod() - 5);
+        final DateTime creationDate = new DateTime().plusSeconds(-locationService.getMaxValidPeriod() - 5);
 
         final Address location = new Address();
         location.setCountryCode("countryCode");
@@ -373,8 +369,7 @@ public class LocationServiceTest extends AbstractSpringTest {
     public void testIsExpiredWithNonExpiredLocation() {
 
         // data preparation
-        final Calendar creationDate = Calendar.getInstance();
-        creationDate.add(Calendar.SECOND, -locationService.getMaxValidPeriod() + 5);
+        final DateTime creationDate = new DateTime().plusSeconds(-locationService.getMaxValidPeriod() + 5);
 
         final Address location = new Address();
         location.setCountryCode("countryCode");
@@ -431,8 +426,8 @@ public class LocationServiceTest extends AbstractSpringTest {
         // notNull(KadasterLocationDTO.VALID_FROM), notNull(KadasterLocationDTO.VALID_TO));
     }
 
-    private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(String zipCode,
-            Integer houseNumber) {
+    private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(final String zipCode,
+            final Integer houseNumber) {
         APD apd = new APD();
         apd.setGegVarActueel(true);
 
