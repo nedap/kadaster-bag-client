@@ -26,11 +26,6 @@
 
 		<dependency>
 			<groupId>com.nedap.healthcare.kadasterbagclient</groupId>
-			<artifactId>model</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.nedap.healthcare.kadasterbagclient</groupId>
 			<artifactId>service</artifactId>
 		</dependency>
 
