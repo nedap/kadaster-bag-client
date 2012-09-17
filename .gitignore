@@ -1,0 +1,9 @@
+target/
+.settings/
+.classpath
+.checkstyle
+.project
+*.class
+*.tmp
+BluVela.log*
+war/
