@@ -113,6 +113,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     @Override
     public void delete(final T entity) {
         getCurrentSession().delete(entity);
+		getCurrentSession().flush();
     }
 
     /**
@@ -123,6 +124,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     @Override
     public void deleteById(final Long id) {
         getCurrentSession().delete(findById(id));
+		getCurrentSession().flush();
     }
 
     /**

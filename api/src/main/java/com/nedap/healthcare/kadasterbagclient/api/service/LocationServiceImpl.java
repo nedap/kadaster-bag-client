@@ -61,7 +61,7 @@ class LocationServiceImpl implements LocationServiceHelper {
 
         if (location != null && isExpired(location)) {
             locationDao.delete(location);
-            location = locationDao.findByCountryPostalCodeAndNumber(NL_COUNTRY_CODE, zipCode, houseNumber);
+			location = null;
         }
 
         if (location == null) {
