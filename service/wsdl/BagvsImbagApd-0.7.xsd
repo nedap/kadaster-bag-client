@@ -147,7 +147,7 @@
 	<xs:complexType name="Verblijfsobject">
 		<xs:annotation>
 			<xs:documentation>
-				Een VERBLIJFSOBJECT is de kleinste binnen één of
+				Een VERBLIJFSOBJECT is de kleinste binnen een of
 				meerdere panden gelegen en voor woon -, bedrijfsmatige -
 				of recreatieve doeleinden geschikte eenheid van gebruik,
 				die ontsloten wordt via een eigen toegang vanaf de
