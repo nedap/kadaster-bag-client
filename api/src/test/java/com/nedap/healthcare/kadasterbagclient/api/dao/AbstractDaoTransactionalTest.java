@@ -26,15 +26,15 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractPersistedEn
     @Test
     public void testGetByIdAndSave() {
 
-    	// data preparation
+        // data preparation
         final T createValidObject = createValidObject();
         getDao().save(createValidObject);
 
         takeSnapshot();
-        
+
         // call method
         final T byId = getDao().findById(createValidObject.getId());
-        
+
         // asserting
         assertObjects(createValidObject, byId);
 
@@ -51,8 +51,8 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractPersistedEn
      */
     @Test
     public void testUpdate() {
-    	
-    	// data preparation
+
+        // data preparation
         final T createValidObject = createValidObject();
         getDao().save(createValidObject);
 
@@ -60,10 +60,10 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractPersistedEn
         assertObjects(createValidObject, byId);
 
         takeSnapshot();
-        
+
         // call method
         getDao().update(createValidObject);
-        
+
         // asserting
         byId = getDao().findById(createValidObject.getId());
         assertObjects(createValidObject, byId);
@@ -75,7 +75,7 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractPersistedEn
     @Test
     public void testSaveOrUpdate() {
 
-    	// data preparation
+        // data preparation
         final T createValidObject = createValidObject();
         getDao().save(createValidObject);
 
@@ -83,10 +83,10 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractPersistedEn
         assertObjects(createValidObject, byId);
 
         takeSnapshot();
-        
+
         // call method
         getDao().saveOrUpdate(createValidObject);
-        
+
         // asserting
         byId = getDao().findById(createValidObject.getId());
         assertObjects(createValidObject, byId);
@@ -97,13 +97,13 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractPersistedEn
      */
     @Test
     public void testDelete() {
-    	
-    	// data preparation
+
+        // data preparation
         final T createValidObject = createValidObject();
         getDao().save(createValidObject);
         takeSnapshot();
-        
-        //call method
+
+        // call method
         getDao().delete(createValidObject);
 
         // asserting
@@ -111,18 +111,32 @@ public abstract class AbstractDaoTransactionalTest<T extends AbstractPersistedEn
 
     }
 
+    @Test
+    public void testEquals() {
+
+        // data preparation
+        final T createValidObject1 = createValidObject();
+        final T createValidObject2 = createValidObject();
+
+        // asserting
+        assertTrue(!createValidObject1.equals(null));
+        assertTrue(!createValidObject1.equals(new Object()));
+        assertTrue(createValidObject1.equals(createValidObject1));
+        assertTrue(createValidObject1.equals(createValidObject2));
+    }
+
     /**
      * Testing DAO deleteById method.
      */
     @Test
     public void deleteById() {
-    	
-    	// data preparation
+
+        // data preparation
         final T createValidObject = createValidObject();
         getDao().save(createValidObject);
 
         takeSnapshot();
-        
+
         // call method
         getDao().deleteById(createValidObject.getId());
 

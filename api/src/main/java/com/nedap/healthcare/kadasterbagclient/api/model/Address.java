@@ -90,6 +90,10 @@ public class Address extends AbstractPersistedEntity {
      *            the country code
      * @param postalCode
      *            the postal code
+     * @param city
+     *            the city name
+     * @param street
+     *            the street name
      * @param number
      *            the number
      * @param numberPostfix
@@ -105,13 +109,15 @@ public class Address extends AbstractPersistedEntity {
      * @param creationDate
      *            the creation date
      */
-    public Address(final String countryCode, final String postalCode, final Integer number, final String numberPostfix,
-            final String latitude, final String longitude, final String validFrom, final String validTo,
-            final DateTime creationDate) {
+    public Address(final String countryCode, final String postalCode, final String city, final String street,
+            final Integer number, final String numberPostfix, final String latitude, final String longitude,
+            final String validFrom, final String validTo, final DateTime creationDate) {
 
         super();
         this.countryCode = countryCode;
         this.postalCode = postalCode;
+        this.city = city;
+        this.street = street;
         this.number = number;
         this.numberPostfix = numberPostfix;
         this.latitude = latitude;
@@ -390,6 +396,13 @@ public class Address extends AbstractPersistedEntity {
                 return false;
             }
         } else if (!number.equals(other.number)) {
+            return false;
+        }
+        if (numberPostfix == null) {
+            if (other.numberPostfix != null) {
+                return false;
+            }
+        } else if (!numberPostfix.equals(other.numberPostfix)) {
             return false;
         }
         if (postalCode == null) {

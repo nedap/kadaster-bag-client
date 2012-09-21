@@ -1,6 +1,8 @@
 package com.nedap.healthcare.kadasterbagclient.api.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -182,6 +184,35 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
     @Override
     public Address createValidObject() {
         return createUniqueAddress("");
+    }
+
+    /**
+     * Testing methods used for access to database outside the regular functions (with custom queries)
+     */
+    @Test
+    public void testHibernateCriteriaMethods() {
+
+        // data preparation
+        final Address location1 = createUniqueAddress("1");
+        locationDao.save(location1);
+        final Address location2 = createUniqueAddress("2");
+        locationDao.save(location2);
+        final Address location3 = createUniqueAddress("3");
+        locationDao.save(location3);
+
+        String[] params = {Address.POSTAL_CODE, Address.NUMBER};
+        Map<String, String> criterias = new HashMap<String, String>();
+        criterias.put(Address.CITY, "city");
+
+        takeSnapshot();
+
+        // call method
+        List<Address> list1 = locationDao.findByExample(location1, params);
+        List<Address> list2 = locationDao.findByCriteria(criterias);
+
+        // asserting
+        assertNotNull(list1);
+        assertNotNull(list2);
     }
 
     private Address createUniqueAddress(final String unique) {
