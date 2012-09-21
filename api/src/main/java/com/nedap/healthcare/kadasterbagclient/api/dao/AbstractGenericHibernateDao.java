@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -113,7 +112,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     @Override
     public void delete(final T entity) {
         getCurrentSession().delete(entity);
-		getCurrentSession().flush();
+        getCurrentSession().flush();
     }
 
     /**
@@ -124,7 +123,7 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
     @Override
     public void deleteById(final Long id) {
         getCurrentSession().delete(findById(id));
-		getCurrentSession().flush();
+        getCurrentSession().flush();
     }
 
     /**
@@ -168,21 +167,21 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
         return (T) crit.uniqueResult();
     }
 
-    /**
-     * Use this inside subclasses as a convenience method.
-     * 
-     * @param criterion
-     *            Criterion[]
-     * @return T
-     */
-    @SuppressWarnings("unchecked")
-    protected T findUniqueByCriteria(final Criterion... criterion) {
-        final Criteria crit = getCurrentSession().createCriteria(getPersistentClass());
-        for (final Criterion c : criterion) {
-            crit.add(c);
-        }
-        return (T) crit.uniqueResult();
-    }
+    // /**
+    // * Use this inside subclasses as a convenience method.
+    // *
+    // * @param criterion
+    // * Criterion[]
+    // * @return T
+    // */
+    // @SuppressWarnings("unchecked")
+    // protected T findUniqueByCriteria(final Criterion... criterion) {
+    // final Criteria crit = getCurrentSession().createCriteria(getPersistentClass());
+    // for (final Criterion c : criterion) {
+    // crit.add(c);
+    // }
+    // return (T) crit.uniqueResult();
+    // }
 
     /**
      * @see nl.deepbluesoftware.greentimes.backend.dao.GenericDao#findByCriteria(Map)
@@ -198,73 +197,73 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
         return criteria.list();
     }
 
-    /**
-     * @param query
-     *            String
-     * @param namedParams
-     *            String[]
-     * @param params
-     *            Object[]
-     * @return int
-     */
-    protected int executeQuery(final String query, final String[] namedParams, final Object[] params) {
-        final Query q = getCurrentSession().createQuery(query);
-
-        if (namedParams != null) {
-            for (int i = 0; i < namedParams.length; i++) {
-                q.setParameter(namedParams[i], params[i]);
-            }
-        }
-
-        return q.executeUpdate();
-    }
-
-    /**
-     * This method will execute an HQL query without named parameters and parameters and return the number of affected
-     * entities.
-     * 
-     * @param query
-     *            String
-     * @return int
-     */
-    protected int executeQuery(final String query) {
-        return executeQuery(query, null, null);
-    }
-
-    /**
-     * This method will execute a Named HQL query and return the number of affected entities.
-     * 
-     * @param namedQuery
-     *            String
-     * @param namedParams
-     *            String[]
-     * @param params
-     *            Object[]
-     * @return int
-     */
-    protected int executeNamedQuery(final String namedQuery, final String[] namedParams, final Object[] params) {
-        final Query q = getCurrentSession().getNamedQuery(namedQuery);
-
-        if (namedParams != null) {
-            for (int i = 0; i < namedParams.length; i++) {
-                q.setParameter(namedParams[i], params[i]);
-            }
-        }
-
-        return q.executeUpdate();
-    }
-
-    /**
-     * This method will execute a Named HQL query without named parameters and parameters and return the number of
-     * affected entities.
-     * 
-     * @param namedQuery
-     *            String
-     * @return int
-     */
-    protected int executeNamedQuery(final String namedQuery) {
-        return executeNamedQuery(namedQuery, null, null);
-    }
+    // /**
+    // * @param query
+    // * String
+    // * @param namedParams
+    // * String[]
+    // * @param params
+    // * Object[]
+    // * @return int
+    // */
+    // protected int executeQuery(final String query, final String[] namedParams, final Object[] params) {
+    // final Query q = getCurrentSession().createQuery(query);
+    //
+    // if (namedParams != null) {
+    // for (int i = 0; i < namedParams.length; i++) {
+    // q.setParameter(namedParams[i], params[i]);
+    // }
+    // }
+    //
+    // return q.executeUpdate();
+    // }
+    //
+    // /**
+    // * This method will execute an HQL query without named parameters and parameters and return the number of affected
+    // * entities.
+    // *
+    // * @param query
+    // * String
+    // * @return int
+    // */
+    // protected int executeQuery(final String query) {
+    // return executeQuery(query, null, null);
+    // }
+    //
+    // /**
+    // * This method will execute a Named HQL query and return the number of affected entities.
+    // *
+    // * @param namedQuery
+    // * String
+    // * @param namedParams
+    // * String[]
+    // * @param params
+    // * Object[]
+    // * @return int
+    // */
+    // protected int executeNamedQuery(final String namedQuery, final String[] namedParams, final Object[] params) {
+    // final Query q = getCurrentSession().getNamedQuery(namedQuery);
+    //
+    // if (namedParams != null) {
+    // for (int i = 0; i < namedParams.length; i++) {
+    // q.setParameter(namedParams[i], params[i]);
+    // }
+    // }
+    //
+    // return q.executeUpdate();
+    // }
+    //
+    // /**
+    // * This method will execute a Named HQL query without named parameters and parameters and return the number of
+    // * affected entities.
+    // *
+    // * @param namedQuery
+    // * String
+    // * @return int
+    // */
+    // protected int executeNamedQuery(final String namedQuery) {
+    // return executeNamedQuery(namedQuery, null, null);
+    // }
 
     /**
      * @see nl.deepbluesoftware.greentimes.backend.dao.GenericDao#findByExample(T, String[])
@@ -318,15 +317,15 @@ public abstract class AbstractGenericHibernateDao<T extends AbstractPersistedEnt
         return sessionFactory.getCurrentSession();
     }
 
-    /**
-     * Surrounds parameter String likeParameter with {@value #PERCENT}.
-     * 
-     * @param likeParameter
-     *            String
-     * @return String
-     */
-    protected String surroundWithPercent(final String likeParameter) {
-        return PERCENT + likeParameter + PERCENT;
-    }
+    // /**
+    // * Surrounds parameter String likeParameter with {@value #PERCENT}.
+    // *
+    // * @param likeParameter
+    // * String
+    // * @return String
+    // */
+    // protected String surroundWithPercent(final String likeParameter) {
+    // return PERCENT + likeParameter + PERCENT;
+    // }
 
 }

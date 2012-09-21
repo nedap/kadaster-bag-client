@@ -28,10 +28,8 @@ public class AbstractController {
     @ExceptionHandler(UnExistingLocation.class)
     public void nonExistingLocationException(final UnExistingLocation exception) {
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Not existing location requested with zipcode {} and house number {} ", exception.getZipCode(),
-                    exception.getHouseNumber());
-        }
+        LOGGER.info("Not existing location requested with zipcode {} and house number {} ", exception.getZipCode(),
+                exception.getHouseNumber());
 
     }
 
@@ -46,9 +44,7 @@ public class AbstractController {
     @ExceptionHandler(FaildCommunicationWithServer.class)
     public void faildCommunicationWithServer(final FaildCommunicationWithServer exception) {
 
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("Error ocured in process of fetching information from web service", exception);
-        }
+        LOGGER.error("Error ocured in process of fetching information from web service", exception);
 
     }
 }

@@ -209,10 +209,12 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         // call method
         List<Address> list1 = locationDao.findByExample(location1, params);
         List<Address> list2 = locationDao.findByCriteria(criterias);
+        List<Address> list3 = locationDao.findAll();
 
         // asserting
         assertNotNull(list1);
         assertNotNull(list2);
+        assertNotNull(list3);
     }
 
     private Address createUniqueAddress(final String unique) {
