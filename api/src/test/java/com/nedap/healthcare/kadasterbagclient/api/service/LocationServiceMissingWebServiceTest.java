@@ -1,7 +1,5 @@
 package com.nedap.healthcare.kadasterbagclient.api.service;
 
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -33,23 +31,18 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringTest {
         final String postalCode = "postcode3";
         final int number = 3;
 
-        System.out.println("treba da unistim");
         ServiceImpl.destroy();
-        
+
         takeSnapshot();
 
         // call method
-        System.out.println("treba da udjem");
         AddressDTO locationDto = null;
         try {
-        	System.out.println("usao");
             locationDto = locationService.getAddress(postalCode, number);
             assertTrue(false);
         } catch (FaildCommunicationWithServer ex) {
             assertTrue(true);
-            System.out.println("puko");
         }
-        System.out.println("izasao");
 
         ServiceImpl.main(null);
 
