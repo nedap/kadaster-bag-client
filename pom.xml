@@ -35,25 +35,27 @@
 		</dependencies>
 	</dependencyManagement>
 
-    <build>
+  <build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId> 
-                <artifactId>cobertura-maven-plugin</artifactId> 
-                <version>2.5</version> 
-                <configuration> 
-                  <aggregate>true</aggregate>
-                  <instrumentation>
-                    <ignores>
-                      <ignore>nl.kadaster.schemas.*</ignore>
-                      <ignore>net.opengis.gml.*</ignore>
-                    </ignores>
-                    <excludes>
-                      <exclude>service/nl/kadaster/schemas/**/*.*</exclude>
-                    </excludes>
-                  </instrumentation>
-                </configuration> 
-			</plugin>
+  			<groupId>org.codehaus.mojo</groupId>
+  			<artifactId>cobertura-maven-plugin</artifactId>
+  			<version>2.5.1</version>
+  			<configuration>
+  				<formats>
+  					<format>html</format>
+  					<format>xml</format>
+  				</formats>					
+  			</configuration>
+  			<executions>
+  				<execution>
+  				 	<phase>package</phase>
+  					<goals>
+  						<goal>cobertura</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
 		</plugins>
 	</build>
     
