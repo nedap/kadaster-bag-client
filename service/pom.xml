@@ -113,6 +113,21 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId> 
+                <artifactId>cobertura-maven-plugin</artifactId> 
+                <version>2.5</version> 
+                <configuration> 
+                  <instrumentation>
+                    <excludes>
+                      <exclude>nl/kadaster/schemas/**/*.*</exclude>
+                      <exclude>net/opengis/gml/**/*.*</exclude>
+                    </excludes>
+                  </instrumentation>
+                </configuration> 
+            </plugin>
+			
 		</plugins>
 		<pluginManagement>
 			<plugins>

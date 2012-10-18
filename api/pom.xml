@@ -221,6 +221,19 @@
 					</connectors>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+                <groupId>org.codehaus.mojo</groupId> 
+                <artifactId>cobertura-maven-plugin</artifactId> 
+                <version>2.5</version> 
+                <configuration> 
+                  <instrumentation>
+                    <excludes>
+                      <exclude>**/UTF8MysqlDialect.*</exclude>
+                    </excludes>
+                  </instrumentation>
+                </configuration> 
+            </plugin>
 
 		</plugins>
 	</build>
