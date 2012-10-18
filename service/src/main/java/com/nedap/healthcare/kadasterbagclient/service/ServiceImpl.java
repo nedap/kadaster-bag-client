@@ -25,6 +25,8 @@ import nl.kadaster.schemas.imbag.apd.v20090901.Woonplaats;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.PuntOfVlak;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.Tijdvakgeldigheid;
 
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.endpoint.ServerImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.mortbay.log.Log;
 
@@ -32,6 +34,8 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
 
     private static final Logger LOG = Logger.getLogger(ServiceImpl.class.getName());
     private Map<String, AntwoordberichtAPDADO> data = null;
+    private static Server server;
+    private static ServiceImpl endpoint;
 
     @Override
     public nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(
@@ -193,17 +197,31 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
     }
 
     public static void main(String args[]) throws Exception {
-        ServiceImpl endpoint = new ServiceImpl();
-        JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
-        svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
-        svrFactory.setAddress("http://localhost:9000/serviceTest");
-        svrFactory.setServiceBean(endpoint);
-        try {
-            svrFactory.create();
-        } catch (RuntimeException re) {
-            // service already started
-        }
+    	if (endpoint == null) {
+	    	endpoint = new ServiceImpl();
+	        JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
+	        svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
+	        svrFactory.setAddress("http://localhost:9000/serviceTest");
+	        svrFactory.setServiceBean(endpoint);
+	        try {
+	            server = (ServerImpl) svrFactory.create();
+	            System.out.println("Server started...");
+	        } catch (RuntimeException re) {
+	            // service already started
+	        }
+    	}
         System.out.println("Server ready...");
+    }
+    
+    public static void destroy() {
+    	System.out.println("Server about to be destroyed...");
+    	if (server != null) {
+	    	server.getEndpoint().clear();
+	    	server.stop();
+	    	server.destroy();
+    	}
+    	endpoint = null;
+    	System.out.println("Server destroyed...");
     }
 
 }

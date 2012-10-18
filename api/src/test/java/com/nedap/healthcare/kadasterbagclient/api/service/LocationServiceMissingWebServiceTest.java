@@ -31,12 +31,15 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringTest {
         final String postalCode = "postcode3";
         final int number = 3;
 
+        ServiceImpl.destroy();
+
         takeSnapshot();
 
         // call method
         AddressDTO locationDto = null;
         try {
             locationDto = locationService.getAddress(postalCode, number);
+            assertTrue(false);
         } catch (FaildCommunicationWithServer ex) {
             assertTrue(true);
         }

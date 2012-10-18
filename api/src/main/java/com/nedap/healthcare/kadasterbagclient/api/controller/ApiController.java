@@ -51,9 +51,7 @@ public class ApiController extends AbstractController {
             @RequestParam(value = "number", required = true) final Integer number) throws UnExistingLocation,
             FaildCommunicationWithServer, ApplicatieException {
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received xml request to location with %zipcode and %number", zipCode, number);
-        }
+        LOGGER.debug("Received xml request to location with %zipcode and %number", zipCode, number);
 
         return locationService.getAddress(zipCode, number);
 
@@ -79,9 +77,7 @@ public class ApiController extends AbstractController {
             @RequestParam(value = "number", required = true) final Integer number) throws UnExistingLocation,
             FaildCommunicationWithServer, ApplicatieException {
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received json request for address with %zipcode and %number", zipCode, number);
-        }
+        LOGGER.debug("Received json request for address with %zipcode and %number", zipCode, number);
 
         return locationService.getAddress(zipCode, number);
     }
