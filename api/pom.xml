@@ -100,6 +100,13 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.9</version>
 		</dependency>
+		
+		<!--  Derby database -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.9.1.0</version>
+        </dependency>
 
 		<!-- Tool for library for tracking, managing and applying database changes. -->
 		<dependency>
@@ -233,6 +240,19 @@
                     </excludes>
                   </instrumentation>
                 </configuration> 
+            </plugin>
+            
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemProperties>
+						<property>
+							<name>derby.system.home</name>
+							<value>target/derby</value>
+						</property>
+					</systemProperties>
+			     </configuration>
             </plugin>
 
 		</plugins>
