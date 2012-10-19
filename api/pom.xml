@@ -106,6 +106,7 @@
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>10.9.1.0</version>
+            <scope>test</scope>
         </dependency>
 
 		<!-- Tool for library for tracking, managing and applying database changes. -->
