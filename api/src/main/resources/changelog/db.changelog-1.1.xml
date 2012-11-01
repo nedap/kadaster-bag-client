@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+	<changeSet id="8" author="daniel sabo" dbms="mysql">
+		<modifyDataType tableName="address" columnName="validFrom" newDataType="datetime"/>
+		<modifyDataType tableName="address" columnName="validTo" newDataType="datetime"/>
+	</changeSet>
+	
+	<changeSet id="9" author="daniel sabo" dbms="derby">
+		<comment>Derby doesn't support direct column alter</comment>
+    	
+		<addColumn tableName="address">
+		    <column name="newValidFrom" type="datetime" />
+		</addColumn>
+		<sql>UPDATE address SET newValidFrom=validFrom</sql>
+		<dropColumn tableName="address" columnName="validFrom"/>
+		<renameColumn tableName="address" oldColumnName="newValidFrom" newColumnName="validFrom"/>
+    	
+    	<addColumn tableName="address">
+		    <column name="newValidTo" type="datetime" />
+		</addColumn>
+		<sql>UPDATE address SET newValidTo=validTo</sql>
+		<dropColumn tableName="address" columnName="validTo"/>
+		<renameColumn tableName="address" oldColumnName="newValidTo" newColumnName="validTo"/>
+	</changeSet>
+	
+ 	<changeSet id="10" author="daniel sabo">
+    	<addNotNullConstraint tableName="address" columnName="validFrom" columnDataType="datetime"/>
+		<addNotNullConstraint tableName="address" columnName="validTo" columnDataType="datetime"/>
+	</changeSet>
+	
+</databaseChangeLog>

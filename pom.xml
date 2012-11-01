@@ -45,7 +45,16 @@
   				<formats>
   					<format>html</format>
   					<format>xml</format>
-  				</formats>					
+  				</formats>	
+  				<instrumentation>
+                    <ignores>
+                      <ignore>nl.kadaster.schemas.*</ignore>
+                      <ignore>net.opengis.gml.*</ignore>
+                    </ignores>
+                    <excludes>
+                      <exclude>service/nl/kadaster/schemas/**/*.*</exclude>
+                    </excludes>
+                  </instrumentation>				
   			</configuration>
   			<executions>
   				<execution>

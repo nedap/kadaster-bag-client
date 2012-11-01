@@ -2,6 +2,7 @@ package com.nedap.healthcare.kadasterbagclient.api;
 
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -63,7 +64,11 @@ public abstract class AbstractKadasterBagClientRepositoryTest extends
 
     @Override
     protected <T> void customAssertEquals(final T expected, final T actual) {
-        assertEquals(expected, actual);
+        if (actual instanceof DateTime) {
+            assertEquals(((DateTime) expected).getMillis(), ((DateTime) actual).getMillis());
+        } else {
+            assertEquals(expected, actual);
+        }
     }
 
 }
