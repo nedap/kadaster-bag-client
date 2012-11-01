@@ -26,7 +26,6 @@ import nl.kadaster.schemas.imbag.imbag_types.v20090901.PuntOfVlak;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.Tijdvakgeldigheid;
 
 import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.endpoint.ServerImpl;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.mortbay.log.Log;
 
@@ -52,7 +51,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
             destroyMockData();
 
             return _return;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
@@ -76,7 +75,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
             destroyMockData();
             Log.info("returning : " + _return);
             return _return;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex);
         }
@@ -86,11 +85,11 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         Log.info("prepareMockData start");
 
         // creating AntwoordberichtAPDADO
-        AntwoordberichtAPDADO a1 = new AntwoordberichtAPDADO();
+        final AntwoordberichtAPDADO a1 = new AntwoordberichtAPDADO();
         a1.setAntwoord(createUniqueAntwoord("1"));
-        AntwoordberichtAPDADO a2 = new AntwoordberichtAPDADO();
+        final AntwoordberichtAPDADO a2 = new AntwoordberichtAPDADO();
         a2.setAntwoord(createUniqueAntwoord("2"));
-        AntwoordberichtAPDADO a3 = new AntwoordberichtAPDADO();
+        final AntwoordberichtAPDADO a3 = new AntwoordberichtAPDADO();
         a3.setAntwoord(createUniqueAntwoord("3"));
 
         if (data == null) {
@@ -109,7 +108,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
     }
 
     private Antwoord createUniqueAntwoord(final String unique) {
-        Antwoord antwoord = new Antwoord();
+        final Antwoord antwoord = new Antwoord();
         antwoord.setVraag(createUniqueVraag(unique));
         antwoord.setProducten(createUniqueProducten(unique));
 
@@ -119,10 +118,10 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
 
     private Producten createUniqueProducten(final String unique) {
 
-        Tijdvakgeldigheid tij = new Tijdvakgeldigheid();
-        tij.setBegindatumTijdvakGeldigheid("20070502000000");
-        tij.setEinddatumTijdvakGeldigheid("22991231000000");
-        Nummeraanduiding numm = new Nummeraanduiding();
+        final Tijdvakgeldigheid tij = new Tijdvakgeldigheid();
+        tij.setBegindatumTijdvakGeldigheid("20070502120000");
+        tij.setEinddatumTijdvakGeldigheid("22991231120000");
+        final Nummeraanduiding numm = new Nummeraanduiding();
         numm.setTijdvakgeldigheid(tij);
         if (unique.length() > 0) {
             numm.setHuisnummer(Integer.valueOf(unique));
@@ -134,39 +133,39 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         numm.setPostcode("postcode" + unique);
 
         // city and street data
-        Woonplaats woonplaats = new Woonplaats();
+        final Woonplaats woonplaats = new Woonplaats();
         woonplaats.setWoonplaatsNaam("city" + unique);
-        OpenbareRuimte or = new OpenbareRuimte();
+        final OpenbareRuimte or = new OpenbareRuimte();
         or.setOpenbareRuimteNaam("street" + unique);
         numm.setGerelateerdeWoonplaats(woonplaats);
         numm.setGerelateerdeOpenbareRuimte(or);
 
         // geo positioning data
-        DirectPositionType dpt = new DirectPositionType();
+        final DirectPositionType dpt = new DirectPositionType();
         dpt.getValue().add(87232.211);// value for x
         dpt.getValue().add(469408.512);// value for y
-        PointType pointType = new PointType();
+        final PointType pointType = new PointType();
         pointType.setPos(dpt);
-        PuntOfVlak punt = new PuntOfVlak();
+        final PuntOfVlak punt = new PuntOfVlak();
         punt.setPoint(pointType);
 
-        GerelateerdeAdressen ga = new GerelateerdeAdressen();
+        final GerelateerdeAdressen ga = new GerelateerdeAdressen();
         ga.setHoofdadres(numm);
-        Verblijfsobject ver = new Verblijfsobject();
+        final Verblijfsobject ver = new Verblijfsobject();
         ver.setGerelateerdeAdressen(ga);
         ver.setVerblijfsobjectGeometrie(punt);
 
-        ADOProduct adop = new ADOProduct();
+        final ADOProduct adop = new ADOProduct();
         adop.setVerblijfsobject(ver);
 
-        Producten result = new Producten();
+        final Producten result = new Producten();
         result.getADOProduct().add(adop);
 
         return result;
     }
 
     private Vraag createUniqueVraag(final String unique) {
-        Vraag v = new Vraag();
+        final Vraag v = new Vraag();
         v.setNUMPostcodeAdres(createUniqueNUMPostcodeAdres(unique));
         v.setAPD(createUniqueAPD(unique));
 
@@ -174,7 +173,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
     }
 
     private NUMPostcodeAdres createUniqueNUMPostcodeAdres(final String unique) {
-        NUMPostcodeAdres result = new NUMPostcodeAdres();
+        final NUMPostcodeAdres result = new NUMPostcodeAdres();
 
         result.setPostcode("postcode" + unique);
         result.setHuisnummer(Integer.parseInt(unique));
@@ -185,7 +184,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
     }
 
     private APD createUniqueAPD(final String unique) {
-        APD result = new APD();
+        final APD result = new APD();
 
         result.setActueelDatum("actueelDatum" + unique);
         result.setPeildatum("peildatum" + unique);
@@ -196,32 +195,32 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         return result;
     }
 
-    public static void main(String args[]) throws Exception {
-    	if (endpoint == null) {
-	    	endpoint = new ServiceImpl();
-	        JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
-	        svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
-	        svrFactory.setAddress("http://localhost:9000/serviceTest");
-	        svrFactory.setServiceBean(endpoint);
-	        try {
-	            server = (ServerImpl) svrFactory.create();
-	            System.out.println("Server started...");
-	        } catch (RuntimeException re) {
-	            // service already started
-	        }
-    	}
+    public static void main(final String args[]) throws Exception {
+        if (endpoint == null) {
+            endpoint = new ServiceImpl();
+            final JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
+            svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
+            svrFactory.setAddress("http://localhost:9000/serviceTest");
+            svrFactory.setServiceBean(endpoint);
+            try {
+                server = svrFactory.create();
+                System.out.println("Server started...");
+            } catch (final RuntimeException re) {
+                // service already started
+            }
+        }
         System.out.println("Server ready...");
     }
-    
+
     public static void destroy() {
-    	System.out.println("Server about to be destroyed...");
-    	if (server != null) {
-	    	server.getEndpoint().clear();
-	    	server.stop();
-	    	server.destroy();
-    	}
-    	endpoint = null;
-    	System.out.println("Server destroyed...");
+        System.out.println("Server about to be destroyed...");
+        if (server != null) {
+            server.getEndpoint().clear();
+            server.stop();
+            server.destroy();
+        }
+        endpoint = null;
+        System.out.println("Server destroyed...");
     }
 
 }

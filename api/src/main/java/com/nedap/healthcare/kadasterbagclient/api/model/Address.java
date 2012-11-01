@@ -62,12 +62,14 @@ public class Address extends AbstractPersistedEntity {
 
     /** The encoding is valid from this date. */
     @Column(nullable = false)
-    private String validFrom;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime validFrom;
     public static final String VALID_FROM = "validFrom";
 
     /** The encoding is valid to this date. */
     @Column(nullable = false)
-    private String validTo;
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime validTo;
     public static final String VALID_TO = "validTo";
 
     /** The creation date. */
@@ -111,7 +113,7 @@ public class Address extends AbstractPersistedEntity {
      */
     public Address(final String countryCode, final String postalCode, final String city, final String street,
             final Integer number, final String numberPostfix, final String latitude, final String longitude,
-            final String validFrom, final String validTo, final DateTime creationDate) {
+            final DateTime validFrom, final DateTime validTo, final DateTime creationDate) {
 
         super();
         this.countryCode = countryCode;
@@ -246,7 +248,7 @@ public class Address extends AbstractPersistedEntity {
      * 
      * @return the valid from
      */
-    public String getValidFrom() {
+    public DateTime getValidFrom() {
         return validFrom;
     }
 
@@ -256,7 +258,7 @@ public class Address extends AbstractPersistedEntity {
      * @param validFrom
      *            the new valid from
      */
-    public void setValidFrom(final String validFrom) {
+    public void setValidFrom(final DateTime validFrom) {
         this.validFrom = validFrom;
     }
 
@@ -265,7 +267,7 @@ public class Address extends AbstractPersistedEntity {
      * 
      * @return the valid to
      */
-    public String getValidTo() {
+    public DateTime getValidTo() {
         return validTo;
     }
 
@@ -275,7 +277,7 @@ public class Address extends AbstractPersistedEntity {
      * @param validTo
      *            the new valid to
      */
-    public void setValidTo(final String validTo) {
+    public void setValidTo(final DateTime validTo) {
         this.validTo = validTo;
     }
 
@@ -355,7 +357,7 @@ public class Address extends AbstractPersistedEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Address other = (Address) obj;
+        final Address other = (Address) obj;
         if (city == null) {
             if (other.city != null) {
                 return false;

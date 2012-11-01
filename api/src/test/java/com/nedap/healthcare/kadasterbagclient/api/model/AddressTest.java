@@ -4,24 +4,26 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringTest;
+import com.nedap.healthcare.kadasterbagclient.api.util.DateTimeUtil;
 
 public class AddressTest extends AbstractSpringTest {
 
     @Test
     public void testEquals() {
-        String countryCode = "countryCode";
-        String postalCode = "postalCode";
-        String city = "city";
-        String street = "street";
-        Integer number = 1;
-        String numberPostfix = "numberPostfix";
-        String latitude = "latitude";
-        String longitude = "longitude";
-        String validFrom = "validFrom";
-        String validTo = "validTo";
-        DateTime creationDate = DateTime.now();
+        final String countryCode = "countryCode";
+        final String postalCode = "postalCode";
+        final String city = "city";
+        final String street = "street";
+        final Integer number = 1;
+        final String numberPostfix = "numberPostfix";
+        final String latitude = "latitude";
+        final String longitude = "longitude";
 
-        Address a1 = new Address();
+        final DateTime validFrom = DateTimeUtil.parse("20120512120000");
+        final DateTime validTo = DateTimeUtil.parse("20120912120000");
+        final DateTime creationDate = DateTime.now();
+
+        final Address a1 = new Address();
         a1.setCity(city);
         a1.setCountryCode(countryCode);
         a1.setCreationDate(creationDate);
@@ -35,7 +37,7 @@ public class AddressTest extends AbstractSpringTest {
         a1.setValidFrom(validFrom);
         a1.setValidTo(validTo);
 
-        Address a2 = new Address();
+        final Address a2 = new Address();
         a2.setCity(city);
         a2.setCountryCode(countryCode);
         a2.setCreationDate(creationDate);
@@ -156,7 +158,7 @@ public class AddressTest extends AbstractSpringTest {
         assertTrue(!a1.equals(a2));
         a1.setStreet(street);
 
-        a2.setValidFrom("wrong");
+        a2.setValidFrom(DateTimeUtil.parse("00000101120000"));
         assertTrue(!a1.equals(a2));
         a2.setValidFrom(null);
         assertTrue(!a1.equals(a2));
@@ -166,7 +168,7 @@ public class AddressTest extends AbstractSpringTest {
         assertTrue(!a1.equals(a2));
         a1.setValidFrom(validFrom);
 
-        a2.setValidTo("wrong");
+        a2.setValidTo(DateTimeUtil.parse("00000101120000"));
         assertTrue(!a1.equals(a2));
         a2.setValidTo(null);
         assertTrue(!a1.equals(a2));
@@ -181,19 +183,20 @@ public class AddressTest extends AbstractSpringTest {
     @Test
     public void testConstructorWithParams() {
         // data preparation
-        String countryCode = "countryCode";
-        String postalCode = "postalCode";
-        String city = "city";
-        String street = "street";
-        Integer number = 1;
-        String numberPostfix = "numberPostfix";
-        String latitude = "latitude";
-        String longitude = "longitude";
-        String validFrom = "validFrom";
-        String validTo = "validTo";
-        DateTime creationDate = DateTime.now();
+        final String countryCode = "countryCode";
+        final String postalCode = "postalCode";
+        final String city = "city";
+        final String street = "street";
+        final Integer number = 1;
+        final String numberPostfix = "numberPostfix";
+        final String latitude = "latitude";
+        final String longitude = "longitude";
 
-        Address a1 = new Address();
+        final DateTime validFrom = DateTimeUtil.parse("20120512120000");
+        final DateTime validTo = DateTimeUtil.parse("20120912120000");
+        final DateTime creationDate = DateTime.now();
+
+        final Address a1 = new Address();
         a1.setCity(city);
         a1.setCountryCode(countryCode);
         a1.setCreationDate(creationDate);
@@ -207,8 +210,8 @@ public class AddressTest extends AbstractSpringTest {
         a1.setValidTo(validTo);
 
         // call method
-        Address a2 = new Address(countryCode, postalCode, city, street, number, numberPostfix, latitude, longitude,
-                validFrom, validTo, creationDate);
+        final Address a2 = new Address(countryCode, postalCode, city, street, number, numberPostfix, latitude,
+                longitude, validFrom, validTo, creationDate);
 
         // asserting
         assertTrue(a1.equals(a2));
