@@ -27,6 +27,7 @@ import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.util.BasselCoordinates;
 import com.nedap.healthcare.kadasterbagclient.api.util.CoordinatesConverterUtil;
+import com.nedap.healthcare.kadasterbagclient.api.util.DateTimeUtil;
 import com.nedap.healthcare.kadasterbagclient.api.util.RDCoordinates;
 
 /**
@@ -61,7 +62,7 @@ class LocationServiceImpl implements LocationServiceHelper {
 
         if (location != null && isExpired(location)) {
             locationDao.delete(location);
-			location = null;
+            location = null;
         }
 
         if (location == null) {
@@ -70,7 +71,7 @@ class LocationServiceImpl implements LocationServiceHelper {
                 result = clientService
                         .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(
                                 zipCode, houseNumber));
-            } catch (WebServiceException ex) {
+            } catch (final WebServiceException ex) {
                 LOGGER.error("Web Service communication error : " + ex.toString());
                 throw new FaildCommunicationWithServer();
             }
@@ -115,12 +116,12 @@ class LocationServiceImpl implements LocationServiceHelper {
     @Override
     public Address convertAndSave(@NotNull final AntwoordberichtAPDADO kadasterLocation) {
 
-        Address location = new Address();
-        Verblijfsobject object = kadasterLocation.getAntwoord().getProducten().getADOProduct().get(0)
+        final Address location = new Address();
+        final Verblijfsobject object = kadasterLocation.getAntwoord().getProducten().getADOProduct().get(0)
                 .getVerblijfsobject();// TODO ? more than one result
-        RDCoordinates rdc = new RDCoordinates(object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue()
+        final RDCoordinates rdc = new RDCoordinates(object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue()
                 .get(0), object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue().get(1));
-        BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(rdc);
+        final BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(rdc);
 
         location.setCountryCode(LocationService.NL_COUNTRY_CODE);
         location.setCreationDate(new DateTime());
@@ -128,10 +129,10 @@ class LocationServiceImpl implements LocationServiceHelper {
         location.setLatitude(bassel.getA().toString());
         location.setLongitude(bassel.getF().toString());
 
-        location.setValidFrom(object.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
-                .getBegindatumTijdvakGeldigheid());
-        location.setValidTo(object.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
-                .getEinddatumTijdvakGeldigheid());
+        location.setValidFrom(DateTimeUtil.parse(object.getGerelateerdeAdressen().getHoofdadres()
+                .getTijdvakgeldigheid().getBegindatumTijdvakGeldigheid()));
+        location.setValidTo(DateTimeUtil.parse(object.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
+                .getEinddatumTijdvakGeldigheid()));
         location.setNumber(object.getGerelateerdeAdressen().getHoofdadres().getHuisnummer());
         location.setNumberPostfix(object.getGerelateerdeAdressen().getHoofdadres().getHuisnummertoevoeging());
         location.setPostalCode(object.getGerelateerdeAdressen().getHoofdadres().getPostcode());
@@ -154,18 +155,18 @@ class LocationServiceImpl implements LocationServiceHelper {
      */
     private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(final String zipCode,
             final Integer houseNumber) {
-        APD apd = new APD();
+        final APD apd = new APD();
         apd.setGegVarActueel(true);
 
-        NUMPostcodeAdres numPostcodeAdres = new NUMPostcodeAdres();
+        final NUMPostcodeAdres numPostcodeAdres = new NUMPostcodeAdres();
         numPostcodeAdres.setHuisnummer(houseNumber);
         numPostcodeAdres.setPostcode(zipCode);
 
-        VraagberichtAPDADOAdres.Vraag vraag = new VraagberichtAPDADOAdres.Vraag();
+        final VraagberichtAPDADOAdres.Vraag vraag = new VraagberichtAPDADOAdres.Vraag();
         vraag.setNUMPostcodeAdres(numPostcodeAdres);
         vraag.setAPD(apd);
 
-        VraagberichtAPDADOAdres result = new VraagberichtAPDADOAdres();
+        final VraagberichtAPDADOAdres result = new VraagberichtAPDADOAdres();
         result.setVraag(vraag);
 
         return result;

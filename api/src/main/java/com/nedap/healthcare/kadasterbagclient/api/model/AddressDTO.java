@@ -2,6 +2,15 @@ package com.nedap.healthcare.kadasterbagclient.api.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.joda.time.DateTime;
+
+import com.nedap.healthcare.json.adapters.DateTimeDeserializer;
+import com.nedap.healthcare.json.adapters.DateTimeSerializer;
+
+@JsonAutoDetect
 @XmlRootElement
 public class AddressDTO {
 
@@ -38,11 +47,11 @@ public class AddressDTO {
     public final static String LONGITUDE = "longitude";
 
     /** The encoding is valid from this date */
-    private String validFrom;
+    private DateTime validFrom;
     public final static String VALID_FROM = "validFrom";
 
     /** The encoding is valid to this date */
-    private String validTo;
+    private DateTime validTo;
     public final static String VALID_TO = "validTo";
 
     public String getCountryCode() {
@@ -93,19 +102,23 @@ public class AddressDTO {
         this.longitude = longitude;
     }
 
-    public String getValidFrom() {
+    @JsonSerialize(using = DateTimeSerializer.class)
+    public DateTime getValidFrom() {
         return validFrom;
     }
 
-    public void setValidFrom(final String validFrom) {
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    public void setValidFrom(final DateTime validFrom) {
         this.validFrom = validFrom;
     }
 
-    public String getValidTo() {
+    @JsonSerialize(using = DateTimeSerializer.class)
+    public DateTime getValidTo() {
         return validTo;
     }
 
-    public void setValidTo(final String validTo) {
+    @JsonDeserialize(using = DateTimeDeserializer.class)
+    public void setValidTo(final DateTime validTo) {
         this.validTo = validTo;
     }
 
@@ -113,7 +126,7 @@ public class AddressDTO {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 
@@ -121,7 +134,7 @@ public class AddressDTO {
         return street;
     }
 
-    public void setStreet(String street) {
+    public void setStreet(final String street) {
         this.street = street;
     }
 

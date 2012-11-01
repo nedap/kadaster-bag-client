@@ -32,6 +32,7 @@ import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.util.BasselCoordinates;
 import com.nedap.healthcare.kadasterbagclient.api.util.CoordinatesConverterUtil;
+import com.nedap.healthcare.kadasterbagclient.api.util.DateTimeUtil;
 import com.nedap.healthcare.kadasterbagclient.api.util.RDCoordinates;
 import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
 
@@ -65,42 +66,42 @@ public class LocationServiceTest extends AbstractSpringTest {
         // data preparation
         final AntwoordberichtAPDADO kadasterLocation = new AntwoordberichtAPDADO();
 
-        Tijdvakgeldigheid tij1 = new Tijdvakgeldigheid();
-        tij1.setBegindatumTijdvakGeldigheid("20070502000000");
-        tij1.setEinddatumTijdvakGeldigheid("22991231000000");
+        final Tijdvakgeldigheid tij1 = new Tijdvakgeldigheid();
+        tij1.setBegindatumTijdvakGeldigheid("20070502120000");
+        tij1.setEinddatumTijdvakGeldigheid("22991231120000");
 
-        Nummeraanduiding numm1 = new Nummeraanduiding();
+        final Nummeraanduiding numm1 = new Nummeraanduiding();
         numm1.setTijdvakgeldigheid(tij1);
         numm1.setHuisnummer(1);
         numm1.setHuisnummertoevoeging("a1");
         numm1.setPostcode("postcode1");
-        Woonplaats woonplaats = new Woonplaats();
+        final Woonplaats woonplaats = new Woonplaats();
         woonplaats.setWoonplaatsNaam("city");
-        OpenbareRuimte openabreRuimte = new OpenbareRuimte();
+        final OpenbareRuimte openabreRuimte = new OpenbareRuimte();
         openabreRuimte.setOpenbareRuimteNaam("street");
         numm1.setGerelateerdeWoonplaats(woonplaats);
         numm1.setGerelateerdeOpenbareRuimte(openabreRuimte);
-        GerelateerdeAdressen ga1 = new GerelateerdeAdressen();
+        final GerelateerdeAdressen ga1 = new GerelateerdeAdressen();
         ga1.setHoofdadres(numm1);
 
         // geo positioning data
-        DirectPositionType dpt = new DirectPositionType();
+        final DirectPositionType dpt = new DirectPositionType();
         dpt.getValue().add(87232.211);// value for x
         dpt.getValue().add(469408.512);// value for y
-        PointType pointType = new PointType();
+        final PointType pointType = new PointType();
         pointType.setPos(dpt);
-        PuntOfVlak punt = new PuntOfVlak();
+        final PuntOfVlak punt = new PuntOfVlak();
         punt.setPoint(pointType);
 
-        Verblijfsobject ver1 = new Verblijfsobject();
+        final Verblijfsobject ver1 = new Verblijfsobject();
         ver1.setGerelateerdeAdressen(ga1);
         ver1.setVerblijfsobjectGeometrie(punt);
-        ADOProduct adop1 = new ADOProduct();
+        final ADOProduct adop1 = new ADOProduct();
         adop1.setVerblijfsobject(ver1);
-        Producten p1 = new Producten();
+        final Producten p1 = new Producten();
         p1.getADOProduct().add(adop1);
 
-        Antwoord an1 = new Antwoord();
+        final Antwoord an1 = new Antwoord();
         an1.setProducten(p1);
 
         kadasterLocation.setAntwoord(an1);
@@ -110,13 +111,13 @@ public class LocationServiceTest extends AbstractSpringTest {
         // call method
         final Address location = locationService.convertAndSave(kadasterLocation);
 
-        Verblijfsobject object = kadasterLocation.getAntwoord().getProducten().getADOProduct().get(0)
+        final Verblijfsobject object = kadasterLocation.getAntwoord().getProducten().getADOProduct().get(0)
                 .getVerblijfsobject();
 
         // asserting
-        RDCoordinates rdc = new RDCoordinates(object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue()
+        final RDCoordinates rdc = new RDCoordinates(object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue()
                 .get(0), object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue().get(1));
-        BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(rdc);
+        final BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(rdc);
 
         assertObject(
                 location,
@@ -129,10 +130,14 @@ public class LocationServiceTest extends AbstractSpringTest {
                 Property.changed(Address.NUMBER_POSTFIX, object.getGerelateerdeAdressen().getHoofdadres()
                         .getHuisnummertoevoeging()),
                 Property.changed(Address.POSTAL_CODE, object.getGerelateerdeAdressen().getHoofdadres().getPostcode()),
-                Property.changed(Address.VALID_FROM, object.getGerelateerdeAdressen().getHoofdadres()
-                        .getTijdvakgeldigheid().getBegindatumTijdvakGeldigheid()),
-                Property.changed(Address.VALID_TO, object.getGerelateerdeAdressen().getHoofdadres()
-                        .getTijdvakgeldigheid().getEinddatumTijdvakGeldigheid()),
+                Property.changed(
+                        Address.VALID_FROM,
+                        DateTimeUtil.parse(object.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
+                                .getBegindatumTijdvakGeldigheid())),
+                Property.changed(
+                        Address.VALID_TO,
+                        DateTimeUtil.parse(object.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
+                                .getEinddatumTijdvakGeldigheid())),
                 Property.changed(AddressDTO.CITY, object.getGerelateerdeAdressen().getHoofdadres()
                         .getGerelateerdeWoonplaats().getWoonplaatsNaam()),
                 Property.changed(AddressDTO.STREET, object.getGerelateerdeAdressen().getHoofdadres()
@@ -153,8 +158,8 @@ public class LocationServiceTest extends AbstractSpringTest {
         kadasterLocation.setNumber(3);
         kadasterLocation.setNumberPostfix("c");
         kadasterLocation.setPostalCode("postalCode");
-        kadasterLocation.setValidFrom("20120512000000");
-        kadasterLocation.setValidTo("20121012000000");
+        kadasterLocation.setValidFrom(DateTimeUtil.parse("20120512120000"));
+        kadasterLocation.setValidTo(DateTimeUtil.parse("20121012120000"));
         kadasterLocation.setCity("city");
         kadasterLocation.setStreet("street");
 
@@ -242,8 +247,8 @@ public class LocationServiceTest extends AbstractSpringTest {
         location.setPostalCode(postalCode);
         location.setLatitude("latitude");
         location.setLongitude("longitude");
-        location.setValidFrom("20120512000000");
-        location.setValidTo("20120912000000");
+        location.setValidFrom(DateTimeUtil.parse("20120512120000"));
+        location.setValidTo(DateTimeUtil.parse("20120912120000"));
         location.setCreationDate(creationDate);
         location.setCity("city");
         location.setStreet("street");
@@ -291,8 +296,8 @@ public class LocationServiceTest extends AbstractSpringTest {
         location.setPostalCode(postalCode);
         location.setLatitude("latitude");
         location.setLongitude("longitude");
-        location.setValidFrom("20120512000000");
-        location.setValidTo("20120912000000");
+        location.setValidFrom(DateTimeUtil.parse("20120512120000"));
+        location.setValidTo(DateTimeUtil.parse("20120912120000"));
         location.setCreationDate(creationDate);
         location.setCity("city");
         location.setStreet("street");
@@ -353,7 +358,7 @@ public class LocationServiceTest extends AbstractSpringTest {
             if (locationDto != null) {
                 assertTrue(false);
             }
-        } catch (UnExistingLocation e) {
+        } catch (final UnExistingLocation e) {
             assertTrue(true);
         }
     }
@@ -374,8 +379,8 @@ public class LocationServiceTest extends AbstractSpringTest {
         location.setNumber(3);
         location.setNumberPostfix("a");
         location.setPostalCode("postalCode");
-        location.setValidFrom("20120512000000");
-        location.setValidTo("20120912000000");
+        location.setValidFrom(DateTimeUtil.parse("20120512120000"));
+        location.setValidTo(DateTimeUtil.parse("20120912120000"));
         location.setCreationDate(creationDate);
         location.setCity("city");
         location.setStreet("street");
@@ -404,8 +409,8 @@ public class LocationServiceTest extends AbstractSpringTest {
         location.setNumber(3);
         location.setNumberPostfix("c");
         location.setPostalCode("postalCode");
-        location.setValidFrom("20120512000000");
-        location.setValidTo("20120912000000");
+        location.setValidFrom(DateTimeUtil.parse("20120512120000"));
+        location.setValidTo(DateTimeUtil.parse("20120912120000"));
         location.setCreationDate(creationDate);
         location.setCity("city");
         location.setStreet("street");
@@ -455,18 +460,18 @@ public class LocationServiceTest extends AbstractSpringTest {
 
     private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(final String zipCode,
             final Integer houseNumber) {
-        APD apd = new APD();
+        final APD apd = new APD();
         apd.setGegVarActueel(true);
 
-        NUMPostcodeAdres numPostcodeAdres = new NUMPostcodeAdres();
+        final NUMPostcodeAdres numPostcodeAdres = new NUMPostcodeAdres();
         numPostcodeAdres.setHuisnummer(houseNumber);
         numPostcodeAdres.setPostcode(zipCode);
 
-        Vraag vraag = new Vraag();
+        final Vraag vraag = new Vraag();
         vraag.setNUMPostcodeAdres(numPostcodeAdres);
         vraag.setAPD(apd);
 
-        VraagberichtAPDADOAdres result = new VraagberichtAPDADOAdres();
+        final VraagberichtAPDADOAdres result = new VraagberichtAPDADOAdres();
         result.setVraag(vraag);
 
         return result;

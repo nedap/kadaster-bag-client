@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
+import com.nedap.healthcare.kadasterbagclient.api.util.DateTimeUtil;
 
 /**
  * Testing {@link LocationHibernateDao}.
@@ -200,16 +201,16 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         final Address location3 = createUniqueAddress("3");
         locationDao.save(location3);
 
-        String[] params = {Address.POSTAL_CODE, Address.NUMBER};
-        Map<String, String> criterias = new HashMap<String, String>();
+        final String[] params = {Address.POSTAL_CODE, Address.NUMBER};
+        final Map<String, String> criterias = new HashMap<String, String>();
         criterias.put(Address.CITY, "city");
 
         takeSnapshot();
 
         // call method
-        List<Address> list1 = locationDao.findByExample(location1, params);
-        List<Address> list2 = locationDao.findByCriteria(criterias);
-        List<Address> list3 = locationDao.findAll();
+        final List<Address> list1 = locationDao.findByExample(location1, params);
+        final List<Address> list2 = locationDao.findByCriteria(criterias);
+        final List<Address> list3 = locationDao.findAll();
 
         // asserting
         assertNotNull(list1);
@@ -232,8 +233,10 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         address.setPostalCode("postalCode" + unique);
         address.setStreet("street");
         address.setCity("city");
-        address.setValidFrom("20120512000000");
-        address.setValidTo("20120912000000");
+        final DateTime validFrom = DateTimeUtil.parse("20120512120000");
+        final DateTime validTo = DateTimeUtil.parse("20120912120000");
+        address.setValidFrom(validFrom);
+        address.setValidTo(validTo);
         address.setCreationDate(new DateTime());
         return address;
     }
