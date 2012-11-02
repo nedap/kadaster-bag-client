@@ -78,7 +78,7 @@ public class AddressTest extends AbstractSpringTest {
         assertTrue(!a1.equals(a2));
         a1.setCountryCode(countryCode);
 
-        a2.setCreationDate(DateTime.now());
+        a2.setCreationDate(DateTime.now().plusMinutes(1));
         assertTrue(!a1.equals(a2));
         a2.setCreationDate(null);
         assertTrue(!a1.equals(a2));
