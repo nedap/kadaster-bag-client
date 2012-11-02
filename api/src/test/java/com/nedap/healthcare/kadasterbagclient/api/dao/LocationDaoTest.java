@@ -1,5 +1,7 @@
 package com.nedap.healthcare.kadasterbagclient.api.dao;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,14 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
 
     @Autowired
     private AddressDao locationDao;
+
+    private static final Comparator<Address> ADDRESS_COMPARATOR = new Comparator<Address>() {
+        // This is where the sorting happens.
+        @Override
+        public int compare(final Address o1, final Address o2) {
+            return o1.getNumber() - o2.getNumber();
+        }
+    };
 
     @Override
     protected GenericDao<Address> getDao() {
@@ -46,6 +56,9 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         // method
         takeSnapshot();
         final List<Address> findAll = locationDao.findAll();
+
+        Collections.sort(findAll, ADDRESS_COMPARATOR);
+
         assertObjects(findAll, location1, location2, location3);
 
     }
@@ -237,7 +250,7 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         final DateTime validTo = DateTimeUtil.parse("20120912120000");
         address.setValidFrom(validFrom);
         address.setValidTo(validTo);
-        address.setCreationDate(new DateTime());
+        address.setCreationDate(DateTimeUtil.parse("20121102092100"));
         return address;
     }
 }
