@@ -7,21 +7,26 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd ">
 
-
 	<import resource="classpath*:META-INF/springContext.xml" />
-	
-	<bean id="propertyConfigurer"
+
+	<bean id="placeholderConfig"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>file:///${GEO_CODING_HOME}/db.properties</value>
-				<value>file:///${GEO_CODING_HOME}/geocoding.properties</value>
+				<value>classpath*:db_test.properties</value>
+				<value>classpath*:geocoding_test.properties</value>
 			</list>
 		</property>
 	</bean>
-	
+
 	<import resource="classpath*:META-INF/persistenceContext.xml" />
 	<import resource="classpath*:META-INF/servletContext.xml" />
-    <import resource="classpath*:META-INF/serviceContext.xml" />
+	
+	<!-- Use serviceTestContext.xml when testing with live Kadaster Bag Service is possible -->
+    <!-- <import resource="serviceTestContext.xml" /> -->
+    
+    <!-- Use missingServiceTestContext.xml when there is no active connection to Kadaster Bag Service -->
+    <import resource="missingServiceTestContext.xml" />
 
-</beans> 
+
+</beans>

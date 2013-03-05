@@ -15,7 +15,7 @@ public class DateTimeUtil {
      */
     private static DateTimeFormatter getDateFormater() {
 
-        return DateTimeFormat.forPattern("yyyyMMddhhmmss").withLocale(new Locale("UTC"));
+        return DateTimeFormat.forPattern("yyyyMMdd").withLocale(new Locale("UTC"));
     }
 
     /**
@@ -26,6 +26,6 @@ public class DateTimeUtil {
      * @return parsed DateTime object
      */
     public static DateTime parse(final String dateTime) {
-        return DateTime.parse(dateTime, getDateFormater());
+        return DateTime.parse(dateTime.substring(0, 8), getDateFormater());
     }
 }

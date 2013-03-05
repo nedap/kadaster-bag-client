@@ -16,6 +16,7 @@ import junit.framework.Assert;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.service.LocationService;
 import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
+
+import eu.execom.testutil.property.Property;
 
 /**
  * Testing api controller functionalities.
@@ -50,6 +53,11 @@ public class ApiControllerTest extends AbstractWebTests {
         ServiceImpl.main(null);
     }
 
+    @AfterClass
+    public static void destroy() {
+        ServiceImpl.destroy();
+    }
+
     /**
      * Testing controller geocode.xml with valid data in case when requested object is not already precashed in local
      * DB.
@@ -67,8 +75,8 @@ public class ApiControllerTest extends AbstractWebTests {
             UnsupportedEncodingException, IOException, ServletException, JAXBException {
 
         // data preparing
-        final String zipCode = "postcode1";
-        final Integer houseNumber = 1;
+        final String zipCode = "7513KC";
+        final Integer houseNumber = 4;
 
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.xml");
@@ -89,9 +97,9 @@ public class ApiControllerTest extends AbstractWebTests {
 
         assertObject(createdEntity, notNull(Address.ID), notNull(Address.CREATION_DATE),
                 changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                notNull(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode), notNull(Address.LATITUDE),
-                notNull(Address.LONGITUDE), notNull(Address.VALID_FROM), notNull(Address.VALID_TO),
-                notNull(Address.CITY), notNull(Address.STREET));
+                Property.nulll(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode),
+                notNull(Address.LATITUDE), notNull(Address.LONGITUDE), notNull(Address.VALID_FROM),
+                Property.nulll(Address.VALID_TO), notNull(Address.CITY), notNull(Address.STREET));
 
         assertObject(locationDto, changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 changed(AddressDTO.NUMBER, createdEntity.getNumber()),
@@ -129,7 +137,7 @@ public class ApiControllerTest extends AbstractWebTests {
         mockRequest.setParameter("zipcode", zipCode);
 
         // calling method
-        final String responseContent = processRequest(null, null, mockRequest, mockResponse);
+        processRequest(null, null, mockRequest, mockResponse);
 
         // asserting
         Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), mockResponse.getStatus());
@@ -159,7 +167,7 @@ public class ApiControllerTest extends AbstractWebTests {
         mockRequest.setParameter("number", houseNumber);
 
         // calling method
-        final String responseContent = processRequest(null, null, mockRequest, mockResponse);
+        processRequest(null, null, mockRequest, mockResponse);
 
         // asserting
         Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), mockResponse.getStatus());
@@ -191,7 +199,7 @@ public class ApiControllerTest extends AbstractWebTests {
         mockRequest.setParameter("number", houseNumber);
 
         // calling method
-        final String responseContent = processRequest(null, null, mockRequest, mockResponse);
+        processRequest(null, null, mockRequest, mockResponse);
 
         // asserting
         Assert.assertEquals(HttpStatus.NOT_FOUND.value(), mockResponse.getStatus());
@@ -213,8 +221,8 @@ public class ApiControllerTest extends AbstractWebTests {
             UnsupportedEncodingException, IOException, ServletException {
 
         // data preparing
-        final String zipCode = "postcode1";
-        final Integer houseNumber = 1;
+        final String zipCode = "7513KC";
+        final Integer houseNumber = 4;
 
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.json");
@@ -235,9 +243,10 @@ public class ApiControllerTest extends AbstractWebTests {
 
         assertObject(createdEntity, notNull(Address.ID),
                 changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                notNull(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode), notNull(Address.CREATION_DATE),
-                notNull(Address.LATITUDE), notNull(Address.LONGITUDE), notNull(Address.VALID_FROM),
-                notNull(Address.VALID_TO), notNull(Address.CITY), notNull(Address.STREET));
+                Property.nulll(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode),
+                notNull(Address.CREATION_DATE), notNull(Address.LATITUDE), notNull(Address.LONGITUDE),
+                notNull(Address.VALID_FROM), Property.nulll(Address.VALID_TO), notNull(Address.CITY),
+                notNull(Address.STREET));
 
         assertObject(locationDto, changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 changed(AddressDTO.NUMBER, createdEntity.getNumber()),
@@ -274,7 +283,7 @@ public class ApiControllerTest extends AbstractWebTests {
         mockRequest.setParameter("zipcode", zipCode);
 
         // calling method
-        final String responseContent = processRequest(null, null, mockRequest, mockResponse);
+        processRequest(null, null, mockRequest, mockResponse);
 
         // asserting
         Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), mockResponse.getStatus());
@@ -303,7 +312,7 @@ public class ApiControllerTest extends AbstractWebTests {
         mockRequest.setParameter("number", houseNumber);
 
         // calling method
-        final String responseContent = processRequest(null, null, mockRequest, mockResponse);
+        processRequest(null, null, mockRequest, mockResponse);
 
         // asserting
         Assert.assertEquals(HttpStatus.BAD_REQUEST.value(), mockResponse.getStatus());
@@ -334,7 +343,7 @@ public class ApiControllerTest extends AbstractWebTests {
         mockRequest.setParameter("number", houseNumber);
 
         // calling method
-        final String responseContent = processRequest(null, null, mockRequest, mockResponse);
+        processRequest(null, null, mockRequest, mockResponse);
 
         // asserting
         Assert.assertEquals(HttpStatus.NOT_FOUND.value(), mockResponse.getStatus());

@@ -91,6 +91,8 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         a2.setAntwoord(createUniqueAntwoord("2"));
         final AntwoordberichtAPDADO a3 = new AntwoordberichtAPDADO();
         a3.setAntwoord(createUniqueAntwoord("3"));
+        final AntwoordberichtAPDADO a4 = new AntwoordberichtAPDADO();
+        a3.setAntwoord(createUniqueAntwoord("4"));
 
         if (data == null) {
             data = new HashMap<String, AntwoordberichtAPDADO>();
@@ -99,6 +101,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         data.put(a1.getAntwoord().getVraag().getNUMPostcodeAdres().getPostcode(), a1);
         data.put(a2.getAntwoord().getVraag().getNUMPostcodeAdres().getPostcode(), a2);
         data.put(a3.getAntwoord().getVraag().getNUMPostcodeAdres().getPostcode(), a3);
+        data.put(a4.getAntwoord().getVraag().getNUMPostcodeAdres().getPostcode(), a4);
 
         Log.info("prepareMockData end");
     }
@@ -130,13 +133,14 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
             numm.setHuisnummer(0);
             numm.setHuisnummertoevoeging("a");
         }
-        numm.setPostcode("postcode" + unique);
+        numm.setPostcode("7513KC");
 
         // city and street data
         final Woonplaats woonplaats = new Woonplaats();
         woonplaats.setWoonplaatsNaam("city" + unique);
         final OpenbareRuimte or = new OpenbareRuimte();
         or.setOpenbareRuimteNaam("street" + unique);
+        or.setGerelateerdeWoonplaats(woonplaats);
         numm.setGerelateerdeWoonplaats(woonplaats);
         numm.setGerelateerdeOpenbareRuimte(or);
 
