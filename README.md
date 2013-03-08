@@ -63,7 +63,7 @@ After creation of java keystore file is created PKCS12 can be deleted, and new j
 
 ##Creation of truststore file
 Because root CA for Kadaster Bag's certificate is Nederland, and that certificate is not in java trusted certificates, it has to be downloaded and placed into custom truststore file.
-Url for download of that certificate can be obtained from Mozilla trusted certificates (http://www.mozilla.org/projects/security/certs/included/#Staat%20der%20Nederlanden%20/%20Logius).
+Url for download of that certificate can be obtained from Mozilla trusted certificates [here](http://www.mozilla.org/projects/security/certs/included/#Staat%20der%20Nederlanden%20/%20Logius "Mozilla certificates list - Staat der Nederlanden").
 Certificate should be downloaded, and keytool can be used to create truststore from obtained certificate :
 
     keytool -import -file path_to_the_file -alias nederland_ca -keystore myTrustStore
