@@ -42,10 +42,10 @@ log4j.properties
 #Deployment instruction
 Before using Kadaster Bag Client these few steps have to be completed :
 
-1.  Java keystore file that contains certificate and private key obtained from Kadaster has to be created
-2.  Truststore file for communication with Kadaster has to be created or selected from project
-3.  Environment variable has to be created
-4.  User specific property files have to be configured
+ 1.  Java keystore file that contains certificate and private key obtained from Kadaster has to be created
+ 2.  Truststore file for communication with Kadaster has to be created or selected from project
+ 3.  Environment variable has to be created
+ 4.  User specific property files have to be configured
 
 After all steps are completed generated api.war file located at api/target/api.war can be deployed at desired tomcat server.
 
