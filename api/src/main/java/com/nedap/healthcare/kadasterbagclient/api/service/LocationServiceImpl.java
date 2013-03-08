@@ -51,7 +51,7 @@ class LocationServiceImpl implements LocationServiceHelper {
     private AddressDao locationDao;
 
     @Autowired
-    private final IBagVsRaadplegenDatumADOV20090901 clientService = null;
+    private IBagVsRaadplegenDatumADOV20090901 clientService;
 
     @Override
     public AddressDTO getAddress(@NotBlank final String zipCode, @NotBlank final Integer houseNumber)
@@ -71,11 +71,14 @@ class LocationServiceImpl implements LocationServiceHelper {
                 result = clientService
                         .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(
                                 zipCode, houseNumber));
-            } catch (final WebServiceException ex) {
-                LOGGER.error("Web Service communication error : " + ex.toString());
-                throw new FaildCommunicationWithServer();
             } catch (final ApplicatieException e) {
                 throw new UnExistingLocation(zipCode, houseNumber);
+            } catch (final WebServiceException ex) {
+                LOGGER.error("Web Service communication error : " + ex.toString());
+                if (ex.getMessage().startsWith(ApplicatieException.class.getName())) {
+                	throw new UnExistingLocation(zipCode, houseNumber);
+                }
+                throw new FaildCommunicationWithServer();
             }
             LOGGER.info("service result " + result);
             location = convertAndSave(result);

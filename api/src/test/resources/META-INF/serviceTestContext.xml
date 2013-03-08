@@ -21,12 +21,12 @@
 	<http:conduit name="https://www.baglv.nl/.*">
 		<http:tlsClientParameters>
 			<sec:trustManagers>
-				<sec:keyStore type="JKS" password="${trust_store_pass}"
-					file="${trust_store_file}" />
+				<sec:keyStore type="JKS" password="${truststore.file.pass}"
+					file="${truststore.file.path}" />
 			</sec:trustManagers>
-			<sec:keyManagers keyPassword="${key_store_pass}">
-				<sec:keyStore type="jks" file="${key_store_file}"
-					password="${key_store_pass}" />
+			<sec:keyManagers keyPassword="${keystore.file.pass}">
+				<sec:keyStore type="jks" file="${keystore.file.path}"
+					password="${keystore.file.pass}" />
 			</sec:keyManagers>
 		</http:tlsClientParameters>
 	</http:conduit>

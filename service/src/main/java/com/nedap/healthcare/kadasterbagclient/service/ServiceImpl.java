@@ -50,6 +50,10 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
 
             destroyMockData();
 
+            if (_return == null) {
+            	throw new ApplicatieException("Object does not exist");
+            }
+            
             return _return;
         } catch (final Exception ex) {
             ex.printStackTrace();
@@ -74,6 +78,9 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
 
             destroyMockData();
             Log.info("returning : " + _return);
+            if (_return == null) {
+            	throw new ApplicatieException("Object does not exist");
+            }
             return _return;
         } catch (final Exception ex) {
             ex.printStackTrace();
@@ -92,7 +99,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         final AntwoordberichtAPDADO a3 = new AntwoordberichtAPDADO();
         a3.setAntwoord(createUniqueAntwoord("3"));
         final AntwoordberichtAPDADO a4 = new AntwoordberichtAPDADO();
-        a3.setAntwoord(createUniqueAntwoord("4"));
+        a4.setAntwoord(createUniqueAntwoord("4"));
 
         if (data == null) {
             data = new HashMap<String, AntwoordberichtAPDADO>();
@@ -123,17 +130,21 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
 
         final Tijdvakgeldigheid tij = new Tijdvakgeldigheid();
         tij.setBegindatumTijdvakGeldigheid("20070502120000");
-        tij.setEinddatumTijdvakGeldigheid("22991231120000");
+        //tij.setEinddatumTijdvakGeldigheid("22991231120000");
         final Nummeraanduiding numm = new Nummeraanduiding();
         numm.setTijdvakgeldigheid(tij);
         if (unique.length() > 0) {
             numm.setHuisnummer(Integer.valueOf(unique));
-            numm.setHuisnummertoevoeging("a" + unique);
+            //numm.setHuisnummertoevoeging("a" + unique);
         } else {
             numm.setHuisnummer(0);
             numm.setHuisnummertoevoeging("a");
         }
-        numm.setPostcode("7513KC");
+        if (unique.equals("4")) {
+        	numm.setPostcode("7513KC");
+        } else {
+        	numm.setPostcode("postcode" + unique);
+        }
 
         // city and street data
         final Woonplaats woonplaats = new Woonplaats();
@@ -179,10 +190,14 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
     private NUMPostcodeAdres createUniqueNUMPostcodeAdres(final String unique) {
         final NUMPostcodeAdres result = new NUMPostcodeAdres();
 
-        result.setPostcode("postcode" + unique);
+        if (unique.equals("4")) {
+        	result.setPostcode("7513KC");
+        } else {
+        	result.setPostcode("postcode" + unique);
+        }
         result.setHuisnummer(Integer.parseInt(unique));
         result.setHuisletter("huisletter" + unique);
-        result.setHuisnummertoevoeging("huisnummertoevoeging" + unique);
+//        result.setHuisnummertoevoeging("huisnummertoevoeging" + unique);
 
         return result;
     }

@@ -267,8 +267,8 @@ public class LocationServiceTest extends AbstractSpringTest {
                 Property.changed(AddressDTO.CITY, createdEntity.getCity()),
                 Property.changed(AddressDTO.STREET, createdEntity.getStreet()));
 
-        Assert.assertEquals("52.21", createdEntity.getLatitude().substring(0, 5));
-        Assert.assertEquals("6.88", createdEntity.getLongitude().substring(0, 4));
+        Assert.assertEquals("52.20", createdEntity.getLatitude().substring(0, 5));
+        Assert.assertEquals("4.39", createdEntity.getLongitude().substring(0, 4));
     }
 
     /**
