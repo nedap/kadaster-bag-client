@@ -25,8 +25,19 @@ public class CoordinatesConverterUtilTest extends AbstractSpringTest {
         BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(new RDCoordinates(
                 212345.678, 423456.789));
 
-        assertEquals(51.79775122, bassel.getF(), 0.00001);
-        assertEquals(06.21907386, bassel.getA(), 0.00001);
+        assertEquals(51.79681, bassel.getF(), 0.00001);
+        assertEquals(6.21852, bassel.getA(), 0.00001);
+
+    }
+    
+    @Test
+    public void testTransformRijksdriehoeksmetingToBassel2() {
+
+        BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(new RDCoordinates(
+                257053.864, 470713.392));
+         
+        assertEquals(52.21506, bassel.getF(), 0.00001);
+        assertEquals(6.88055, bassel.getA(), 0.00001);
 
     }
 }
