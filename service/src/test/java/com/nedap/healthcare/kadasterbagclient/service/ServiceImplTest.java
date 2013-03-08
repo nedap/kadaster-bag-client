@@ -1,5 +1,7 @@
 package com.nedap.healthcare.kadasterbagclient.service;
 
+import javax.xml.ws.soap.SOAPFaultException;
+
 import junit.framework.Assert;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.ApplicatieException;
@@ -23,136 +25,136 @@ import org.mortbay.log.Log;
  */
 public class ServiceImplTest {
 
-    private static IBagVsRaadplegenDatumADOV20090901 client = null;
+	private static IBagVsRaadplegenDatumADOV20090901 client = null;
 
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 
-        ServiceImpl.main(null);
+		ServiceImpl.main(null);
 
-        // ServiceImpl endpoint = new ServiceImpl();
-        // JaxWsServerFactoryBean svrFactory = new JaxWsServerFactoryBean();
-        // svrFactory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
-        // svrFactory.setAddress("http://localhost:9000/service");
-        // svrFactory.setServiceBean(endpoint);
-        // svrFactory.create();
+		JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
+		factory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
+		factory.setAddress("http://localhost:9000/serviceTest");
+		client = (IBagVsRaadplegenDatumADOV20090901) factory.create();
 
-        JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(IBagVsRaadplegenDatumADOV20090901.class);
-        factory.setAddress("http://localhost:9000/serviceTest");
-        client = (IBagVsRaadplegenDatumADOV20090901) factory.create();
+	}
 
-    }
+	/**
+	 * Testing method
+	 * {@link ServiceImpl#zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(VraagberichtAPDADOAdres)}
+	 * .
+	 */
+	@Test
+	public void testZoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum()
+			throws ApplicatieException {
 
-    /**
-     * Testing method
-     * {@link ServiceImpl#zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(VraagberichtAPDADOAdres)}.
-     */
-    @Test
-    public void testZoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum() throws ApplicatieException {
+		// data preparing
+		VraagberichtAPDADOAdres address = new VraagberichtAPDADOAdres();
+		Vraag vraag = new Vraag();
+		NUMNaamAdres naa1 = new NUMNaamAdres();
+		naa1.setWoonplaatsId("postalCode1");
+		vraag.setNUMNaamAdres(naa1);
 
-        // data preparing
-        VraagberichtAPDADOAdres address = new VraagberichtAPDADOAdres();
-        Vraag vraag = new Vraag();
-        NUMNaamAdres naa1 = new NUMNaamAdres();
-        naa1.setWoonplaatsId("postalCode1");
-        vraag.setNUMNaamAdres(naa1);
+		NUMPostcodeAdres npa = new NUMPostcodeAdres();
+		npa.setPostcode("postcode1");
+		npa.setHuisnummer(1);
+		vraag.setNUMPostcodeAdres(npa);
 
-        NUMPostcodeAdres npa = new NUMPostcodeAdres();
-        npa.setPostcode("postcode1");
-        npa.setHuisnummer(1);
-        vraag.setNUMPostcodeAdres(npa);
+		APD apd1 = new APD();
+		apd1.setPeildatum("20090105");
+		apd1.setGegVarPeildatum(true);
 
-        APD apd1 = new APD();
-        apd1.setPeildatum("20090105");
-        apd1.setGegVarPeildatum(true);
+		vraag.setAPD(apd1);
 
-        vraag.setAPD(apd1);
+		address.setVraag(vraag);
 
-        address.setVraag(vraag);
+		// calling method
+		AntwoordberichtAPDADO result = client
+				.zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(address);
+		Log.info("result [good] : " + result.toString());
 
-        // calling method
-        AntwoordberichtAPDADO result = client
-                .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(address);
-        Log.info("result [good] : " + result.toString());
+		// asserting
+		Assert.assertNotNull(result);
+	}
 
-        // asserting
-        Assert.assertNotNull(result);
-    }
+	/**
+	 * Testing method
+	 * {@link ServiceImpl#zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(VraagberichtAPDADOAdres)}
+	 * . Method should return null because of wrong value for address -
+	 * productcode parameter.
+	 */
+	@Test(expected = SOAPFaultException.class)
+	public void testZoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatumFailForWrongProductcode()
+			throws ApplicatieException {
 
-    /**
-     * Testing method
-     * {@link ServiceImpl#zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(VraagberichtAPDADOAdres)}.
-     * Method should return null because of wrong value for address - productcode parameter.
-     */
-    @Test
-    public void testZoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatumFailForWrongProductcode()
-            throws ApplicatieException {
+		// data preparing
+		VraagberichtAPDADOAdres address = new VraagberichtAPDADOAdres();
+		Vraag vraag = new Vraag();
+		APD apd1 = new APD();
+		apd1.setProductcode("productcode0");
+		vraag.setAPD(apd1);
+		address.setVraag(vraag);
 
-        // data preparing
-        VraagberichtAPDADOAdres address = new VraagberichtAPDADOAdres();
-        Vraag vraag = new Vraag();
-        APD apd1 = new APD();
-        apd1.setProductcode("productcode0");
-        vraag.setAPD(apd1);
-        address.setVraag(vraag);
+		NUMPostcodeAdres npa = new NUMPostcodeAdres();
+		npa.setPostcode("postcode0");
+		npa.setHuisnummer(0);
+		vraag.setNUMPostcodeAdres(npa);
 
-        NUMPostcodeAdres npa = new NUMPostcodeAdres();
-        npa.setPostcode("postcode0");
-        npa.setHuisnummer(0);
-        vraag.setNUMPostcodeAdres(npa);
+		// calling method
+		client.zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(address);
 
-        // calling method
-        AntwoordberichtAPDADO result = client
-                .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(address);
-        Log.info("result [bad] : " + result);
+		// asserting
+		Assert.fail("Exception should have been thrown.");
+	}
 
-        // asserting
-        Assert.assertNull(result);
-    }
+	/**
+	 * Testing method
+	 * {@link ServiceImpl#opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(VraagberichtAPDADOID)}
+	 * .
+	 */
+	@Test
+	public void testOpvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum()
+			throws ApplicatieException {
 
-    /**
-     * Testing method {@link ServiceImpl#opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(VraagberichtAPDADOID)}.
-     */
-    @Test
-    public void testOpvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum() throws ApplicatieException {
+		// data preparing
+		VraagberichtAPDADOID id = new VraagberichtAPDADOID();
+		VraagberichtAPDADOID.Vraag vraag = new VraagberichtAPDADOID.Vraag();
+		APD apd1 = new APD();
+		apd1.setProductcode("postcode2");
+		vraag.setAPD(apd1);
+		id.setVraag(vraag);
 
-        // data preparing
-        VraagberichtAPDADOID id = new VraagberichtAPDADOID();
-        VraagberichtAPDADOID.Vraag vraag = new VraagberichtAPDADOID.Vraag();
-        APD apd1 = new APD();
-        apd1.setProductcode("postcode2");
-        vraag.setAPD(apd1);
-        id.setVraag(vraag);
+		// calling method
+		AntwoordberichtAPDADO result = client
+				.opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(id);
 
-        // calling method
-        AntwoordberichtAPDADO result = client.opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(id);
+		// asserting
+		Assert.assertNotNull(result);
+	}
 
-        // asserting
-        Assert.assertNotNull(result);
-    }
+	/**
+	 * Testing method
+	 * {@link ServiceImpl#opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(VraagberichtAPDADOID)}
+	 * . Method should throw exception because of wrong value for id - productcode
+	 * parameter.
+	 */
+	@Test(expected = SOAPFaultException.class)
+	public void testOpvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatumFailForProductcode()
+			throws ApplicatieException {
 
-    /**
-     * Testing method {@link ServiceImpl#opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(VraagberichtAPDADOID)}.
-     * Method should return null because of wrong value for id - productcode parameter.
-     */
-    @Test
-    public void testOpvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatumFailForProductcode()
-            throws ApplicatieException {
+		// data preparing
+		VraagberichtAPDADOID id = new VraagberichtAPDADOID();
+		VraagberichtAPDADOID.Vraag vraag = new VraagberichtAPDADOID.Vraag();
+		APD apd1 = new APD();
+		apd1.setProductcode("productcode0");
+		vraag.setAPD(apd1);
+		id.setVraag(vraag);
 
-        // data preparing
-        VraagberichtAPDADOID id = new VraagberichtAPDADOID();
-        VraagberichtAPDADOID.Vraag vraag = new VraagberichtAPDADOID.Vraag();
-        APD apd1 = new APD();
-        apd1.setProductcode("productcode0");
-        vraag.setAPD(apd1);
-        id.setVraag(vraag);
+		// calling method
+		client.opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(id);
 
-        // calling method
-        AntwoordberichtAPDADO result = client.opvragenAdresseerbaarObjectByAdoIdAndActueelOrPeildatum(id);
-
-        // asserting
-        Assert.assertNull(result);
-    }
+		// asserting
+		Assert.fail("Exception should have been thrown.");
+	}
 
 }

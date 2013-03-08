@@ -3,7 +3,7 @@ package com.nedap.healthcare.kadasterbagclient.api.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringTest;
+import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringNoExternalServiceTest;
 import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
@@ -12,7 +12,7 @@ import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
 
 import eu.execom.testutil.property.Property;
 
-public class LocationServiceMissingWebServiceTest extends AbstractSpringTest {
+public class LocationServiceMissingWebServiceTest extends AbstractSpringNoExternalServiceTest {
 
     @Autowired
     private LocationServiceHelper locationService;
@@ -40,7 +40,7 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringTest {
         try {
             locationDto = locationService.getAddress(postalCode, number);
             assertTrue(false);
-        } catch (FaildCommunicationWithServer ex) {
+        } catch (final FaildCommunicationWithServer ex) {
             assertTrue(true);
         }
 
@@ -54,10 +54,10 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringTest {
 
         assertObject(createdEntity, Property.notNull(Address.ID), Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.NUMBER, number), Property.notNull(Address.NUMBER_POSTFIX),
+                Property.changed(Address.NUMBER, number), Property.nulll(Address.NUMBER_POSTFIX),
                 Property.changed(Address.POSTAL_CODE, postalCode), Property.notNull(Address.LATITUDE),
                 Property.notNull(Address.LONGITUDE), Property.notNull(Address.VALID_FROM),
-                Property.notNull(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
+                Property.nulll(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
 
         assertObject(locationDto, Property.changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
                 Property.changed(AddressDTO.NUMBER, createdEntity.getNumber()),

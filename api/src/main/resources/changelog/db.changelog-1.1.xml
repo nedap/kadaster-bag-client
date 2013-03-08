@@ -30,7 +30,6 @@
 	
  	<changeSet id="10" author="daniel sabo">
     	<addNotNullConstraint tableName="address" columnName="validFrom" columnDataType="datetime"/>
-		<addNotNullConstraint tableName="address" columnName="validTo" columnDataType="datetime"/>
 	</changeSet>
 	
 </databaseChangeLog>

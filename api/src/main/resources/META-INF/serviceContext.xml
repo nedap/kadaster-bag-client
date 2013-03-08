@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:jaxws="http://cxf.apache.org/jaxws"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
+	xmlns:http="http://cxf.apache.org/transports/http/configuration"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:sec="http://cxf.apache.org/configuration/security"
+	xsi:schemaLocation="
           http://www.springframework.org/schema/beans 
           http://www.springframework.org/schema/beans/spring-beans.xsd
           http://cxf.apache.org/jaxws 
-          http://cxf.apache.org/schemas/jaxws.xsd">
+          http://cxf.apache.org/schemas/jaxws.xsd
+          http://cxf.apache.org/transports/http/configuration 
+     	  http://cxf.apache.org/schemas/configuration/http-conf.xsd
+     	  http://cxf.apache.org/configuration/security 
+    	  http://cxf.apache.org/schemas/configuration/security.xsd">
 
-    <jaxws:client id="clientService"
-                  serviceClass="nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901"
-                  address="http://localhost:9000/serviceTest" />
+	<jaxws:client id="clientService"
+		serviceClass="nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901"
+		address="https://www.baglv.nl/Verstrekkingen/20090901/RaadplegenDatumADO/">
+	</jaxws:client>
+
+	<http:conduit name="https://www.baglv.nl/.*">
+		<http:tlsClientParameters>
+			<sec:trustManagers>
+				<sec:keyStore type="JKS" password="${truststore.file.pass}"
+					file="${truststore.file.path}" />
+			</sec:trustManagers>
+			<sec:keyManagers keyPassword="${keystore.file.pass}">
+				<sec:keyStore type="jks" file="${keystore.file.path}"
+					password="${keystore.file.pass}" />
+			</sec:keyManagers>
+		</http:tlsClientParameters>
+	</http:conduit>
+	
 </beans>
