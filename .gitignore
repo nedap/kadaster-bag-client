@@ -8,3 +8,6 @@ target/
 *.tmp
 BluVela.log*
 war/
+
+artifactory.ioservice.net
+
