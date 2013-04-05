@@ -24,6 +24,13 @@ db_test.properties
 geocoding_test.properties
 
 	max.validation.period.sec=1000
+	keystore.file.path=/home/path/to/keystore/keystore.jks
+  keystore.file.pass=pass
+
+  # You can use this default truststore located in opt folder of this project, 
+  # or reference some other truststore that contains requested certificate
+  truststore.file.path=/home/path/to/truststore/truststore.jks
+  truststore.file.pass=pass
 
 log4j.properties
 
