@@ -20,6 +20,7 @@ db_test.properties
 	jdbc.password=123
 	jdbc.driver=com.mysql.jdbc.Driver
 	jdbc.url=jdbc:mysql://localhost:3306/kadasterbagclient_test?useUnicode=true&characterEncoding=UTF-8
+	hibernate.dialect=org.hibernate.dialect.MySQLDialect
 
 geocoding_test.properties
 
@@ -64,7 +65,7 @@ In first step certificate and private key obtained from Kadaster are used to gen
     
 And in second step this temporary PKCS12 file is used to create java kestore file :
 
-    keytool -importkeystore -deststorepass custom_password -destkeypass custom_password -destkeystore custom_name.keystore -deststoretype JKS -srckeystore temp.p12 -srcstoretype PKCS12 -srcstorepass entered_password
+    keytool -importkeystore -deststorepass custom_password -destkeystore custom_name.keystore -deststoretype JKS -srckeystore temp.p12 -srcstoretype PKCS12 -srcstorepass entered_password
     
 After creation of java keystore file is created PKCS12 can be deleted, and new java keystore file places into desired location. This keystore will be referenced in geocoding.properties file.
 
