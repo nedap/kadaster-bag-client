@@ -17,8 +17,9 @@
 		<!-- tell the compiler we can use 1.6 -->
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
+		<cxf.version>2.2.9</cxf.version>
 	</properties>
-
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -31,6 +32,22 @@
 				<artifactId>testutil</artifactId>
 				<version>2.3.0-SNAPSHOT</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-bundle</artifactId>
+				<version>${cxf.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-servlet_2.5_spec</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.geronimo.specs</groupId>
+				<artifactId>geronimo-servlet_2.5_spec</artifactId>
+				<version>1.2</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
