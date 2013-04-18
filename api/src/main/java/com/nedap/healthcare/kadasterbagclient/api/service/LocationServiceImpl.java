@@ -69,10 +69,25 @@ class LocationServiceImpl implements LocationServiceHelper {
 
         if (location == null) {
             AntwoordberichtAPDADO result = null;
+            Verblijfsobject object = null;
             try {
                 result = clientService
                         .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(
                                 zipCode, houseNumber, extension));
+
+                // if response is null or without kadaster address - throw not found exception
+                if (result != null && result.getAntwoord().getProducten().getADOProduct().size() > 0) {
+                    object = result.getAntwoord().getProducten().getADOProduct().get(0).getVerblijfsobject();
+                } else {
+                    LOGGER.info("Response doesn't contain any addresses");
+                    throw new UnExistingLocation(zipCode, houseNumber);
+                }
+
+                // log if more than one kadaster address is returned from service
+                if (result.getAntwoord().getProducten().getADOProduct().size() > 1) {
+                    LOGGER.info("More than one address was returned, found "
+                            + result.getAntwoord().getProducten().getADOProduct().size());
+                }
             } catch (final ApplicatieException e) {
                 throw new UnExistingLocation(zipCode, houseNumber);
             } catch (final WebServiceException ex) {
@@ -83,7 +98,7 @@ class LocationServiceImpl implements LocationServiceHelper {
                 throw new FaildCommunicationWithServer();
             }
             LOGGER.info("service result " + result);
-            location = convertAndSave(result);
+            location = convertAndSave(object);
         }
 
         return convertToDto(location);
@@ -117,19 +132,14 @@ class LocationServiceImpl implements LocationServiceHelper {
     }
 
     @Override
-    public Address convertAndSave(@NotNull final AntwoordberichtAPDADO kadasterLocation) {
+    public Address convertAndSave(@NotNull final Verblijfsobject kadasterLocation) {
 
         final Address location = new Address();
-        final Verblijfsobject object = kadasterLocation.getAntwoord().getProducten().getADOProduct().get(0)
-                .getVerblijfsobject();
-        if (kadasterLocation.getAntwoord().getProducten().getADOProduct().size() > 1) {
-            LOGGER.info("More than one address was returned, found "
-                    + kadasterLocation.getAntwoord().getProducten().getADOProduct().size());
-        }
 
-        LOGGER.debug("Entire object for location : " + object.toString());
-        final RDCoordinates rdc = new RDCoordinates(object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue()
-                .get(0), object.getVerblijfsobjectGeometrie().getPoint().getPos().getValue().get(1));
+        LOGGER.debug("Entire object for location : " + kadasterLocation.toString());
+        final RDCoordinates rdc = new RDCoordinates(kadasterLocation.getVerblijfsobjectGeometrie().getPoint().getPos()
+                .getValue().get(0), kadasterLocation.getVerblijfsobjectGeometrie().getPoint().getPos().getValue()
+                .get(1));
         final BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(rdc);
 
         location.setCountryCode(LocationService.NL_COUNTRY_CODE);
@@ -138,19 +148,19 @@ class LocationServiceImpl implements LocationServiceHelper {
         location.setLatitude(bassel.getF().toString());
         location.setLongitude(bassel.getA().toString());
 
-        location.setValidFrom(DateTimeUtil.parse(object.getGerelateerdeAdressen().getHoofdadres()
+        location.setValidFrom(DateTimeUtil.parse(kadasterLocation.getGerelateerdeAdressen().getHoofdadres()
                 .getTijdvakgeldigheid().getBegindatumTijdvakGeldigheid()));
-        final String endDate = object.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
+        final String endDate = kadasterLocation.getGerelateerdeAdressen().getHoofdadres().getTijdvakgeldigheid()
                 .getEinddatumTijdvakGeldigheid();
         if (endDate != null) {
             location.setValidTo(DateTimeUtil.parse(endDate));
         }
-        location.setNumber(object.getGerelateerdeAdressen().getHoofdadres().getHuisnummer());
-        location.setNumberPostfix(object.getGerelateerdeAdressen().getHoofdadres().getHuisnummertoevoeging());
-        location.setPostalCode(object.getGerelateerdeAdressen().getHoofdadres().getPostcode());
-        location.setCity(object.getGerelateerdeAdressen().getHoofdadres().getGerelateerdeOpenbareRuimte()
+        location.setNumber(kadasterLocation.getGerelateerdeAdressen().getHoofdadres().getHuisnummer());
+        location.setNumberPostfix(kadasterLocation.getGerelateerdeAdressen().getHoofdadres().getHuisnummertoevoeging());
+        location.setPostalCode(kadasterLocation.getGerelateerdeAdressen().getHoofdadres().getPostcode());
+        location.setCity(kadasterLocation.getGerelateerdeAdressen().getHoofdadres().getGerelateerdeOpenbareRuimte()
                 .getGerelateerdeWoonplaats().getWoonplaatsNaam());
-        location.setStreet(object.getGerelateerdeAdressen().getHoofdadres().getGerelateerdeOpenbareRuimte()
+        location.setStreet(kadasterLocation.getGerelateerdeAdressen().getHoofdadres().getGerelateerdeOpenbareRuimte()
                 .getOpenbareRuimteNaam());
 
         locationDao.save(location);

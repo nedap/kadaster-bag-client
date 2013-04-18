@@ -124,7 +124,8 @@ public class LocationServiceTest extends AbstractSpringTest {
         takeSnapshot();
 
         // call method
-        final Address location = locationService.convertAndSave(kadasterLocation);
+        final Address location = locationService.convertAndSave(kadasterLocation.getAntwoord().getProducten()
+                .getADOProduct().get(0).getVerblijfsobject());
 
         final Verblijfsobject object = kadasterLocation.getAntwoord().getProducten().getADOProduct().get(0)
                 .getVerblijfsobject();
