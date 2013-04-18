@@ -16,11 +16,16 @@ class LocationHibernateDao extends AbstractGenericHibernateDao<Address> implemen
 
     @Override
     public Address findByCountryPostalCodeAndNumber(@NotBlank final String countryCode,
-            @NotBlank final String postalCode, @NotBlank final Integer number) {
+            @NotBlank final String postalCode, @NotBlank final Integer number, final String extension) {
 
-        return findByCriteriaUnique(Restrictions.eq(Address.COUNTRY_CODE, countryCode),
-                Restrictions.eq(Address.POSTAL_CODE, postalCode), Restrictions.eq(Address.NUMBER, number));
-
+        if (extension != null) {
+            return findByCriteriaUnique(Restrictions.eq(Address.COUNTRY_CODE, countryCode),
+                    Restrictions.eq(Address.POSTAL_CODE, postalCode), Restrictions.eq(Address.NUMBER, number),
+                    Restrictions.eq(Address.NUMBER_POSTFIX, extension));
+        } else {
+            return findByCriteriaUnique(Restrictions.eq(Address.COUNTRY_CODE, countryCode),
+                    Restrictions.eq(Address.POSTAL_CODE, postalCode), Restrictions.eq(Address.NUMBER, number));
+        }
     }
 
 }

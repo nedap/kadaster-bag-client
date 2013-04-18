@@ -23,6 +23,14 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
     @Autowired
     private AddressDao locationDao;
 
+    Address location1;
+    Address location2;
+    Address location3;
+    final String countryCode = "conutryCode1";
+    final String postalCode = "postalCode1";
+    final String extension = "a1";
+    final int number = 1;
+
     private static final Comparator<Address> ADDRESS_COMPARATOR = new Comparator<Address>() {
         // This is where the sorting happens.
         @Override
@@ -43,18 +51,12 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
 
     @Override
     public void testFindAll() {
-        // init
-        final Address location1 = createUniqueAddress("1");
-        locationDao.save(location1);
 
-        final Address location2 = createUniqueAddress("2");
-        locationDao.save(location2);
-
-        final Address location3 = createUniqueAddress("3");
-        locationDao.save(location3);
+        // prepare data
+        setup();
+        takeSnapshot();
 
         // method
-        takeSnapshot();
         final List<Address> findAll = locationDao.findAll();
 
         Collections.sort(findAll, ADDRESS_COMPARATOR);
@@ -63,30 +65,47 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
 
     }
 
+    public void setup() {
+        location1 = createUniqueAddress("1");
+        locationDao.save(location1);
+        location2 = createUniqueAddress("2");
+        locationDao.save(location2);
+        location3 = createUniqueAddress("3");
+        locationDao.save(location3);
+    }
+
     /**
      * Testing method {@link AddressDao#findByCountryPostalCodeAndNumber} .
      */
     @Test
-    public void testFindByCountryPostalCodeAndNumber() {
+    public void testFindByCountryPostalCodeAndNumberSuccess() {
 
-        // data preparation
-        final Address location1 = createUniqueAddress("1");
-        locationDao.save(location1);
-        final Address location2 = createUniqueAddress("2");
-        locationDao.save(location2);
-        final Address location3 = createUniqueAddress("3");
-        locationDao.save(location3);
-        final String countryCode = "conutryCode2";
-        final String postalCode = "postalCode2";
-        final int number = 2;
-
+        setup();
         takeSnapshot();
 
         // call method
-        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, number);
+        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, number,
+                extension);
 
         // asserting
-        assertObjects(location, location2);
+        assertObjects(location, location1);
+
+    }
+
+    /**
+     * Testing method {@link AddressDao#findByCountryPostalCodeAndNumber} .
+     */
+    @Test
+    public void testFindByCountryPostalCodeAndNumberSuccessWithoutExtension() {
+
+        setup();
+        takeSnapshot();
+
+        // call method
+        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, number, null);
+
+        // asserting
+        assertObjects(location, location1);
 
     }
 
@@ -97,21 +116,12 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
     @Test
     public void testFindByCountryPostalCodeAndNumberFailForCountryCode() {
 
-        // data preparation
-        final Address location1 = createUniqueAddress("1");
-        locationDao.save(location1);
-        final Address location2 = createUniqueAddress("2");
-        locationDao.save(location2);
-        final Address location3 = createUniqueAddress("3");
-        locationDao.save(location3);
-        final String countryCode = "conutryCode4";
-        final String postalCode = "postalCode2";
-        final int number = 2;
-
+        setup();
         takeSnapshot();
 
         // call method
-        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, number);
+        final Address location = locationDao.findByCountryPostalCodeAndNumber("conutryCode2", postalCode, number,
+                extension);
 
         // asserting
         assertNull(location);
@@ -124,21 +134,12 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
     @Test
     public void testFindByCountryPostalCodeAndNumberFailForPostalCode() {
 
-        // data preparation
-        final Address location1 = createUniqueAddress("1");
-        locationDao.save(location1);
-        final Address location2 = createUniqueAddress("2");
-        locationDao.save(location2);
-        final Address location3 = createUniqueAddress("3");
-        locationDao.save(location3);
-        final String countryCode = "conutryCode1";
-        final String postalCode = "postalCode2";
-        final int number = 1;
-
+        setup();
         takeSnapshot();
 
         // call method
-        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, number);
+        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, "postalCode2", number,
+                extension);
 
         // asserting
         assertNull(location);
@@ -151,21 +152,28 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
     @Test
     public void testFindByCountryPostalCodeAndNumberFailForNumber() {
 
-        // data preparation
-        final Address location1 = createUniqueAddress("1");
-        locationDao.save(location1);
-        final Address location2 = createUniqueAddress("2");
-        locationDao.save(location2);
-        final Address location3 = createUniqueAddress("3");
-        locationDao.save(location3);
-        final String countryCode = "conutryCode1";
-        final String postalCode = "postalCode1";
-        final int number = 0;
-
+        setup();
         takeSnapshot();
 
         // call method
-        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, number);
+        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, 0, extension);
+
+        // asserting
+        assertNull(location);
+    }
+
+    /**
+     * Testing method {@link AddressDao#findByCountryPostalCodeAndNumber}. Method should return null because of wrong
+     * value for number parameter.
+     */
+    @Test
+    public void testFindByCountryPostalCodeAndNumberFailForExtension() {
+
+        setup();
+        takeSnapshot();
+
+        // call method
+        final Address location = locationDao.findByCountryPostalCodeAndNumber(countryCode, postalCode, number, "b");
 
         // asserting
         assertNull(location);
@@ -178,18 +186,11 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
     @Test
     public void testFindByCountryPostalCodeAndNumberFailForNullParameters() {
 
-        // data preparation
-        final Address location1 = createUniqueAddress("1");
-        locationDao.save(location1);
-        final Address location2 = createUniqueAddress("2");
-        locationDao.save(location2);
-        final Address location3 = createUniqueAddress("3");
-        locationDao.save(location3);
-
+        setup();
         takeSnapshot();
 
         // call method
-        final Address location = locationDao.findByCountryPostalCodeAndNumber(null, null, null);
+        final Address location = locationDao.findByCountryPostalCodeAndNumber(null, null, null, null);
 
         // asserting
         assertNull(location);
@@ -207,13 +208,7 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
     public void testHibernateCriteriaMethods() {
 
         // data preparation
-        final Address location1 = createUniqueAddress("1");
-        locationDao.save(location1);
-        final Address location2 = createUniqueAddress("2");
-        locationDao.save(location2);
-        final Address location3 = createUniqueAddress("3");
-        locationDao.save(location3);
-
+        setup();
         final String[] params = {Address.POSTAL_CODE, Address.NUMBER};
         final Map<String, String> criterias = new HashMap<String, String>();
         criterias.put(Address.CITY, "city");
@@ -253,4 +248,14 @@ public class LocationDaoTest extends AbstractDaoTransactionalTest<Address> {
         address.setCreationDate(DateTimeUtil.parse("20121102092100"));
         return address;
     }
+
+    // @After
+    // public void after() {
+    // locationDao.delete(location1);
+    // locationDao.delete(location2);
+    // locationDao.delete(location3);
+    // markEntityAsDeleted(location1);
+    // markEntityAsDeleted(location2);
+    // markEntityAsDeleted(location3);
+    // }
 }

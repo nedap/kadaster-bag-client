@@ -1,6 +1,27 @@
 package com.nedap.healthcare.kadasterbagclient.api.service;
 
 import junit.framework.Assert;
+
+import org.joda.time.DateTime;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringTest;
+import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
+import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
+import com.nedap.healthcare.kadasterbagclient.api.exception.UnExistingLocation;
+import com.nedap.healthcare.kadasterbagclient.api.model.AbstractPersistedEntity;
+import com.nedap.healthcare.kadasterbagclient.api.model.Address;
+import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
+import com.nedap.healthcare.kadasterbagclient.api.util.BasselCoordinates;
+import com.nedap.healthcare.kadasterbagclient.api.util.CoordinatesConverterUtil;
+import com.nedap.healthcare.kadasterbagclient.api.util.DateTimeUtil;
+import com.nedap.healthcare.kadasterbagclient.api.util.RDCoordinates;
+import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
+
+import eu.execom.testutil.property.Property;
 import net.opengis.gml.DirectPositionType;
 import net.opengis.gml.PointType;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
@@ -20,26 +41,6 @@ import nl.kadaster.schemas.imbag.apd.v20090901.Woonplaats;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.PuntOfVlak;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.Tijdvakgeldigheid;
 
-import org.joda.time.DateTime;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringTest;
-import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
-import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
-import com.nedap.healthcare.kadasterbagclient.api.exception.UnExistingLocation;
-import com.nedap.healthcare.kadasterbagclient.api.model.Address;
-import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
-import com.nedap.healthcare.kadasterbagclient.api.util.BasselCoordinates;
-import com.nedap.healthcare.kadasterbagclient.api.util.CoordinatesConverterUtil;
-import com.nedap.healthcare.kadasterbagclient.api.util.DateTimeUtil;
-import com.nedap.healthcare.kadasterbagclient.api.util.RDCoordinates;
-import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
-
-import eu.execom.testutil.property.Property;
-
 /**
  * Test for {@link LocationServiceImpl}.
  * 
@@ -51,6 +52,10 @@ public class LocationServiceTest extends AbstractSpringTest {
     private LocationServiceHelper locationService;
     @Autowired
     private AddressDao locationDao;
+
+    final String postalCode = "7513KC";
+    final int number = 4;
+    final String extension = "a4";
 
     /*
      * This setup is used in case there is no access to actual Kadaster service, so mocked one should be used instead.
@@ -80,17 +85,6 @@ public class LocationServiceTest extends AbstractSpringTest {
         tij1.setBegindatumTijdvakGeldigheid("20070502120000");
         tij1.setEinddatumTijdvakGeldigheid("22991231120000");
 
-        // final Nummeraanduiding numm1 = new Nummeraanduiding();
-        // numm1.setTijdvakgeldigheid(tij1);
-        // numm1.setHuisnummer(1);
-        // numm1.setHuisnummertoevoeging("a1");
-        // numm1.setPostcode("postcode1");
-        // final Woonplaats woonplaats = new Woonplaats();
-        // woonplaats.setWoonplaatsNaam("city");
-        // final OpenbareRuimte openabreRuimte = new OpenbareRuimte();
-        // openabreRuimte.setOpenbareRuimteNaam("street");
-
-        // =====
         final Verblijfsobject convertObject = new Verblijfsobject();
         final GerelateerdeAdressen adresses = new GerelateerdeAdressen();
         final Nummeraanduiding mainAddress = new Nummeraanduiding();
@@ -106,12 +100,6 @@ public class LocationServiceTest extends AbstractSpringTest {
         mainAddress.setPostcode("postcode1");
         adresses.setHoofdadres(mainAddress);
         convertObject.setGerelateerdeAdressen(adresses);
-        // =====
-
-        // numm1.setGerelateerdeWoonplaats(woonplaats);
-        // numm1.setGerelateerdeOpenbareRuimte(openabreRuimte);
-        // final GerelateerdeAdressen ga1 = new GerelateerdeAdressen();
-        // ga1.setHoofdadres(numm1);
 
         // geo positioning data
         final DirectPositionType dpt = new DirectPositionType();
@@ -123,11 +111,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         punt.setPoint(pointType);
         convertObject.setVerblijfsobjectGeometrie(punt);
 
-        // final Verblijfsobject ver1 = new Verblijfsobject();
-        // ver1.setGerelateerdeAdressen(ga1);
-        // ver1.setVerblijfsobjectGeometrie(punt);
         final ADOProduct adop1 = new ADOProduct();
-        // adop1.setVerblijfsobject(ver1);
         adop1.setVerblijfsobject(convertObject);
         final Producten p1 = new Producten();
         p1.getADOProduct().add(adop1);
@@ -152,7 +136,7 @@ public class LocationServiceTest extends AbstractSpringTest {
 
         assertObject(
                 location,
-                Property.notNull(Address.ID),
+                Property.notNull(AbstractPersistedEntity.ID),
                 Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
                 Property.changed(Address.LATITUDE, bassel.getF().toString()),
@@ -174,18 +158,6 @@ public class LocationServiceTest extends AbstractSpringTest {
                 Property.changed(AddressDTO.STREET, object.getGerelateerdeAdressen().getHoofdadres()
                         .getGerelateerdeOpenbareRuimte().getOpenbareRuimteNaam()));
 
-        // assertObject(
-        // locationFromDAO,
-        // changed(AddressDTO.COUNTRY_CODE, location.getCountryCode()),
-        // changed(AddressDTO.NUMBER, location.getNumber()),
-        // changed(AddressDTO.NUMBER_POSTFIX, location.getNumberPostfix()),
-        // changed(AddressDTO.POSTAL_CODE, location.getPostalCode()),
-        // changed(AddressDTO.LATITUDE, location.getLatitude()),
-        // changed(AddressDTO.LONGITUDE, location.getLongitude()),
-        // changed(AddressDTO.VALID_FROM, location.getValidFrom()),
-        // changed(AddressDTO.VALID_TO, location.getValidTo()),
-        // changed(AddressDTO.CITY, location.getCity()),
-        // changed(AddressDTO.STREET, location.getStreet()));
     }
 
     /**
@@ -236,22 +208,19 @@ public class LocationServiceTest extends AbstractSpringTest {
     public void testGetLocationWithoutPreCashedLocation() throws UnExistingLocation, FaildCommunicationWithServer,
             ApplicatieException {
 
-        // data preparation
-        final String postalCode = "7513KC";
-        final int number = 4;
-
         takeSnapshot();
 
         // call method
-        final AddressDTO locationDto = locationService.getAddress(postalCode, number);
+        final AddressDTO locationDto = locationService.getAddress(postalCode, number, extension);
 
         // asserting
         final Address createdEntity = locationDao.findByCountryPostalCodeAndNumber(LocationService.NL_COUNTRY_CODE,
-                postalCode, number);
+                postalCode, number, extension);
 
-        assertObject(createdEntity, Property.notNull(Address.ID), Property.notNull(Address.CREATION_DATE),
+        assertObject(createdEntity, Property.notNull(AbstractPersistedEntity.ID),
+                Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.NUMBER, number), Property.nulll(Address.NUMBER_POSTFIX),
+                Property.changed(Address.NUMBER, number), Property.changed(Address.NUMBER_POSTFIX, extension),
                 Property.changed(Address.POSTAL_CODE, postalCode), Property.notNull(Address.LATITUDE),
                 Property.notNull(Address.LONGITUDE), Property.notNull(Address.VALID_FROM),
                 Property.nulll(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
@@ -283,14 +252,12 @@ public class LocationServiceTest extends AbstractSpringTest {
             FaildCommunicationWithServer, ApplicatieException {
 
         // data preparation
-        final String postalCode = "7513KC";
-        final int number = 4;
         final DateTime creationDate = new DateTime().plusSeconds(-locationService.getMaxValidPeriod() + 5);
 
         final Address location = new Address();
-        location.setCountryCode(LocationServiceHelper.NL_COUNTRY_CODE);
+        location.setCountryCode(LocationService.NL_COUNTRY_CODE);
         location.setNumber(number);
-        location.setNumberPostfix("c");
+        location.setNumberPostfix(extension);
         location.setPostalCode(postalCode);
         location.setLatitude("latitude");
         location.setLongitude("longitude");
@@ -305,7 +272,7 @@ public class LocationServiceTest extends AbstractSpringTest {
         takeSnapshot();
 
         // call method
-        final AddressDTO locationDto = locationService.getAddress(postalCode, number);
+        final AddressDTO locationDto = locationService.getAddress(postalCode, number, extension);
 
         // asserting
         assertObject(locationDto, Property.changed(AddressDTO.COUNTRY_CODE, location.getCountryCode()),
@@ -332,14 +299,12 @@ public class LocationServiceTest extends AbstractSpringTest {
             ApplicatieException {
 
         // data preparation
-        final String postalCode = "7513KC";
-        final int number = 4;
         final DateTime creationDate = new DateTime().plusSeconds(-locationService.getMaxValidPeriod() - 5);
 
         final Address location = new Address();
-        location.setCountryCode(LocationServiceHelper.NL_COUNTRY_CODE);
+        location.setCountryCode(LocationService.NL_COUNTRY_CODE);
         location.setNumber(number);
-        location.setNumberPostfix("c");
+        location.setNumberPostfix(extension);
         location.setPostalCode(postalCode);
         location.setLatitude("latitude");
         location.setLongitude("longitude");
@@ -354,17 +319,18 @@ public class LocationServiceTest extends AbstractSpringTest {
         takeSnapshot();
 
         // call method
-        final AddressDTO locationDto = locationService.getAddress(postalCode, number);
+        final AddressDTO locationDto = locationService.getAddress(postalCode, number, extension);
 
         // asserting
         final Address createdEntity = locationDao.findByCountryPostalCodeAndNumber(LocationService.NL_COUNTRY_CODE,
-                postalCode, number);
+                postalCode, number, extension);
 
         markEntityAsDeleted(location);
 
-        assertObject(createdEntity, Property.notNull(Address.ID), Property.notNull(Address.CREATION_DATE),
+        assertObject(createdEntity, Property.notNull(AbstractPersistedEntity.ID),
+                Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.NUMBER, number), Property.nulll(Address.NUMBER_POSTFIX),
+                Property.changed(Address.NUMBER, number), Property.changed(Address.NUMBER_POSTFIX, extension),
                 Property.changed(Address.POSTAL_CODE, postalCode), Property.notNull(Address.LATITUDE),
                 Property.notNull(Address.LONGITUDE), Property.notNull(Address.VALID_FROM),
                 Property.nulll(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
@@ -392,15 +358,11 @@ public class LocationServiceTest extends AbstractSpringTest {
     public void testGetLocationWithoutPreCashedLocationUnExistingParameters() throws FaildCommunicationWithServer,
             ApplicatieException {
 
-        // data preparation
-        final String postalCode = "postcode0";
-        final int number = 0;
-
         takeSnapshot();
 
         // call method
         try {
-            final AddressDTO locationDto = locationService.getAddress(postalCode, number);
+            final AddressDTO locationDto = locationService.getAddress("postcode0", 0, extension);
 
             if (locationDto != null) {
                 assertTrue(false);
@@ -479,39 +441,26 @@ public class LocationServiceTest extends AbstractSpringTest {
     @Test
     public void testGetLocatioFromKadaster() throws UnExistingLocation, ApplicatieException {
 
-        // data preparation
-        final String zipCode = "7513KC";
-        final int houseNumber = 4;
-
         takeSnapshot();
 
         // call method
         final AntwoordberichtAPDADO kadasterLocation = locationService.getWSClient()
                 .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(
-                        wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(zipCode, houseNumber));
+                        wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(postalCode, number, extension));
 
         assertNotNull(kadasterLocation);
 
-        // asserting
-        // assertObject(kadasterLocation,
-        // changed(KadasterLocationDTO.COUNTRY_CODE,
-        // LocationService.NL_COUNTRY_CODE),
-        // changed(KadasterLocationDTO.NUMBER, houseNumber),
-        // changed(KadasterLocationDTO.POSTAL_CODE, zipCode),
-        // notNull(KadasterLocationDTO.LATITUDE),
-        // notNull(KadasterLocationDTO.LONGITUDE),
-        // notNull(KadasterLocationDTO.VALID_FROM),
-        // notNull(KadasterLocationDTO.VALID_TO));
     }
 
     private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(final String zipCode,
-            final Integer houseNumber) {
+            final Integer houseNumber, final String extension) {
         final APD apd = new APD();
         apd.setGegVarActueel(true);
 
         final NUMPostcodeAdres numPostcodeAdres = new NUMPostcodeAdres();
         numPostcodeAdres.setHuisnummer(houseNumber);
         numPostcodeAdres.setPostcode(zipCode);
+        numPostcodeAdres.setHuisnummertoevoeging(extension);
 
         final Vraag vraag = new Vraag();
         vraag.setNUMPostcodeAdres(numPostcodeAdres);

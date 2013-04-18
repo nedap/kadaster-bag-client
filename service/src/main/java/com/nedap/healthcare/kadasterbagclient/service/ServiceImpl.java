@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.apache.cxf.endpoint.Server;
+import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
+import org.mortbay.log.Log;
+
 import net.opengis.gml.DirectPositionType;
 import net.opengis.gml.PointType;
 import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
@@ -24,10 +28,6 @@ import nl.kadaster.schemas.imbag.apd.v20090901.Verblijfsobject;
 import nl.kadaster.schemas.imbag.apd.v20090901.Woonplaats;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.PuntOfVlak;
 import nl.kadaster.schemas.imbag.imbag_types.v20090901.Tijdvakgeldigheid;
-
-import org.apache.cxf.endpoint.Server;
-import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
-import org.mortbay.log.Log;
 
 public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
 
@@ -51,9 +51,9 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
             destroyMockData();
 
             if (_return == null) {
-            	throw new ApplicatieException("Object does not exist");
+                throw new ApplicatieException("Object does not exist");
             }
-            
+
             return _return;
         } catch (final Exception ex) {
             ex.printStackTrace();
@@ -79,7 +79,7 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
             destroyMockData();
             Log.info("returning : " + _return);
             if (_return == null) {
-            	throw new ApplicatieException("Object does not exist");
+                throw new ApplicatieException("Object does not exist");
             }
             return _return;
         } catch (final Exception ex) {
@@ -130,20 +130,20 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
 
         final Tijdvakgeldigheid tij = new Tijdvakgeldigheid();
         tij.setBegindatumTijdvakGeldigheid("20070502120000");
-        //tij.setEinddatumTijdvakGeldigheid("22991231120000");
+        // tij.setEinddatumTijdvakGeldigheid("22991231120000");
         final Nummeraanduiding numm = new Nummeraanduiding();
         numm.setTijdvakgeldigheid(tij);
         if (unique.length() > 0) {
             numm.setHuisnummer(Integer.valueOf(unique));
-            //numm.setHuisnummertoevoeging("a" + unique);
+            numm.setHuisnummertoevoeging("a" + unique);
         } else {
             numm.setHuisnummer(0);
             numm.setHuisnummertoevoeging("a");
         }
         if (unique.equals("4")) {
-        	numm.setPostcode("7513KC");
+            numm.setPostcode("7513KC");
         } else {
-        	numm.setPostcode("postcode" + unique);
+            numm.setPostcode("postcode" + unique);
         }
 
         // city and street data
@@ -191,13 +191,13 @@ public class ServiceImpl implements IBagVsRaadplegenDatumADOV20090901 {
         final NUMPostcodeAdres result = new NUMPostcodeAdres();
 
         if (unique.equals("4")) {
-        	result.setPostcode("7513KC");
+            result.setPostcode("7513KC");
         } else {
-        	result.setPostcode("postcode" + unique);
+            result.setPostcode("postcode" + unique);
         }
         result.setHuisnummer(Integer.parseInt(unique));
         result.setHuisletter("huisletter" + unique);
-//        result.setHuisnummertoevoeging("huisnummertoevoeging" + unique);
+        result.setHuisnummertoevoeging("a" + unique);
 
         return result;
     }

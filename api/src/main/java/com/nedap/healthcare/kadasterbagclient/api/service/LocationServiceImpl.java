@@ -3,14 +3,6 @@ package com.nedap.healthcare.kadasterbagclient.api.service;
 import javax.validation.constraints.NotNull;
 import javax.xml.ws.WebServiceException;
 
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.ApplicatieException;
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901;
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.VraagberichtAPDADOAdres;
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.APD;
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.NUMPostcodeAdres;
-import nl.kadaster.schemas.imbag.apd.v20090901.Verblijfsobject;
-
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -29,6 +21,14 @@ import com.nedap.healthcare.kadasterbagclient.api.util.BasselCoordinates;
 import com.nedap.healthcare.kadasterbagclient.api.util.CoordinatesConverterUtil;
 import com.nedap.healthcare.kadasterbagclient.api.util.DateTimeUtil;
 import com.nedap.healthcare.kadasterbagclient.api.util.RDCoordinates;
+
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.ApplicatieException;
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901;
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.VraagberichtAPDADOAdres;
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.APD;
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_selecties.v20090901.NUMPostcodeAdres;
+import nl.kadaster.schemas.imbag.apd.v20090901.Verblijfsobject;
 
 /**
  * {@link LocationServiceHelper} implementation.
@@ -54,11 +54,13 @@ class LocationServiceImpl implements LocationServiceHelper {
     private IBagVsRaadplegenDatumADOV20090901 clientService;
 
     @Override
-    public AddressDTO getAddress(@NotBlank final String zipCode, @NotBlank final Integer houseNumber)
-            throws UnExistingLocation, FaildCommunicationWithServer, ApplicatieException {
+    public AddressDTO getAddress(@NotBlank final String zipCode, @NotBlank final Integer houseNumber,
+            final String extension) throws UnExistingLocation, FaildCommunicationWithServer, ApplicatieException {
 
-        LOGGER.debug("Find location in Netherlands for zipCode:{} and houseNumber: {} ", zipCode, houseNumber);
-        Address location = locationDao.findByCountryPostalCodeAndNumber(NL_COUNTRY_CODE, zipCode, houseNumber);
+        LOGGER.debug(String.format("Find location in Netherlands for zipCode: %s, houseNumber: %s and extension: %s ",
+                zipCode, houseNumber, extension));
+        Address location = locationDao.findByCountryPostalCodeAndNumber(NL_COUNTRY_CODE, zipCode, houseNumber,
+                extension);
 
         if (location != null && isExpired(location)) {
             locationDao.delete(location);
@@ -70,13 +72,13 @@ class LocationServiceImpl implements LocationServiceHelper {
             try {
                 result = clientService
                         .zoekenAdresseerbaarObjectByPostcodeHuisnummerAndActueelOrPeildatum(wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(
-                                zipCode, houseNumber));
+                                zipCode, houseNumber, extension));
             } catch (final ApplicatieException e) {
                 throw new UnExistingLocation(zipCode, houseNumber);
             } catch (final WebServiceException ex) {
                 LOGGER.error("Web Service communication error : " + ex.toString());
                 if (ex.getMessage().startsWith(ApplicatieException.class.getName())) {
-                	throw new UnExistingLocation(zipCode, houseNumber);
+                    throw new UnExistingLocation(zipCode, houseNumber);
                 }
                 throw new FaildCommunicationWithServer();
             }
@@ -164,13 +166,14 @@ class LocationServiceImpl implements LocationServiceHelper {
      * @return
      */
     private VraagberichtAPDADOAdres wrapZipCodeAndHouseNumberToVraagberichtAPDADOAdres(final String zipCode,
-            final Integer houseNumber) {
+            final Integer houseNumber, final String extension) {
         final APD apd = new APD();
         apd.setGegVarActueel(true);
 
         final NUMPostcodeAdres numPostcodeAdres = new NUMPostcodeAdres();
         numPostcodeAdres.setHuisnummer(houseNumber);
         numPostcodeAdres.setPostcode(zipCode);
+        numPostcodeAdres.setHuisnummertoevoeging(extension);
 
         final VraagberichtAPDADOAdres.Vraag vraag = new VraagberichtAPDADOAdres.Vraag();
         vraag.setNUMPostcodeAdres(numPostcodeAdres);
