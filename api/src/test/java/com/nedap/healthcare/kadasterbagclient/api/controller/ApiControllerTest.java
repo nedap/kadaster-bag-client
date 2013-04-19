@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nedap.healthcare.kadasterbagclient.api.AbstractWebTests;
 import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
+import com.nedap.healthcare.kadasterbagclient.api.model.AbstractPersistedEntity;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.service.LocationService;
@@ -43,6 +44,10 @@ public class ApiControllerTest extends AbstractWebTests {
 
     @Autowired
     private AddressDao locationDao;
+
+    final String zipCode = "7513KC";
+    final Integer houseNumber = 4;
+    final String extension = "a4";
 
     @Before
     public void setJaxb() throws Exception {
@@ -75,9 +80,6 @@ public class ApiControllerTest extends AbstractWebTests {
             UnsupportedEncodingException, IOException, ServletException, JAXBException {
 
         // data preparing
-        final String zipCode = "7513KC";
-        final Integer houseNumber = 4;
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.xml");
         mockRequest.setParameter("zipcode", zipCode);
@@ -93,11 +95,11 @@ public class ApiControllerTest extends AbstractWebTests {
         Assert.assertNotNull(locationDto);
 
         final Address createdEntity = locationDao.findByCountryPostalCodeAndNumber(LocationService.NL_COUNTRY_CODE,
-                zipCode, houseNumber);
+                zipCode, houseNumber, extension);
 
-        assertObject(createdEntity, notNull(Address.ID), notNull(Address.CREATION_DATE),
+        assertObject(createdEntity, notNull(AbstractPersistedEntity.ID), notNull(Address.CREATION_DATE),
                 changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                Property.nulll(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode),
+                changed(Address.NUMBER_POSTFIX, locationDto.getNumberPostfix()), changed(Address.POSTAL_CODE, zipCode),
                 notNull(Address.LATITUDE), notNull(Address.LONGITUDE), notNull(Address.VALID_FROM),
                 Property.nulll(Address.VALID_TO), notNull(Address.CITY), notNull(Address.STREET));
 
@@ -130,11 +132,9 @@ public class ApiControllerTest extends AbstractWebTests {
             JsonMappingException, UnsupportedEncodingException, IOException, ServletException, JAXBException {
 
         // data preparing
-        final String zipCode = "postalCode3";
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.xml");
-        mockRequest.setParameter("zipcode", zipCode);
+        mockRequest.setParameter("zipcode", "postalCode3");
 
         // calling method
         processRequest(null, null, mockRequest, mockResponse);
@@ -160,11 +160,9 @@ public class ApiControllerTest extends AbstractWebTests {
             JsonMappingException, UnsupportedEncodingException, IOException, ServletException, JAXBException {
 
         // data preparing
-        final String houseNumber = "3";
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.xml");
-        mockRequest.setParameter("number", houseNumber);
+        mockRequest.setParameter("number", "3");
 
         // calling method
         processRequest(null, null, mockRequest, mockResponse);
@@ -190,13 +188,10 @@ public class ApiControllerTest extends AbstractWebTests {
             JsonMappingException, UnsupportedEncodingException, IOException, ServletException, JAXBException {
 
         // data preparing
-        final String zipCode = "postalCode";
-        final String houseNumber = "44";
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.xml");
-        mockRequest.setParameter("zipcode", zipCode);
-        mockRequest.setParameter("number", houseNumber);
+        mockRequest.setParameter("zipcode", "postalCode");
+        mockRequest.setParameter("number", "44");
 
         // calling method
         processRequest(null, null, mockRequest, mockResponse);
@@ -220,10 +215,6 @@ public class ApiControllerTest extends AbstractWebTests {
     public void testGeoCodeXmlJsonValidDataNotCatchedCode() throws JsonGenerationException, JsonMappingException,
             UnsupportedEncodingException, IOException, ServletException {
 
-        // data preparing
-        final String zipCode = "7513KC";
-        final Integer houseNumber = 4;
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.json");
         mockRequest.setParameter("zipcode", zipCode);
@@ -239,11 +230,13 @@ public class ApiControllerTest extends AbstractWebTests {
         Assert.assertNotNull(locationDto);
 
         final Address createdEntity = locationDao.findByCountryPostalCodeAndNumber(LocationService.NL_COUNTRY_CODE,
-                zipCode, houseNumber);
+                zipCode, houseNumber, extension);
 
-        assertObject(createdEntity, notNull(Address.ID),
+        Assert.assertNotNull(createdEntity);
+
+        assertObject(createdEntity, notNull(AbstractPersistedEntity.ID),
                 changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                Property.nulll(Address.NUMBER_POSTFIX), changed(Address.POSTAL_CODE, zipCode),
+                changed(Address.NUMBER_POSTFIX, locationDto.getNumberPostfix()), changed(Address.POSTAL_CODE, zipCode),
                 notNull(Address.CREATION_DATE), notNull(Address.LATITUDE), notNull(Address.LONGITUDE),
                 notNull(Address.VALID_FROM), Property.nulll(Address.VALID_TO), notNull(Address.CITY),
                 notNull(Address.STREET));
@@ -276,11 +269,9 @@ public class ApiControllerTest extends AbstractWebTests {
             JsonMappingException, UnsupportedEncodingException, IOException, ServletException {
 
         // data preparing
-        final String zipCode = "postalCode3";
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.json");
-        mockRequest.setParameter("zipcode", zipCode);
+        mockRequest.setParameter("zipcode", "postalCode3");
 
         // calling method
         processRequest(null, null, mockRequest, mockResponse);
@@ -305,11 +296,9 @@ public class ApiControllerTest extends AbstractWebTests {
             JsonMappingException, UnsupportedEncodingException, IOException, ServletException {
 
         // data preparing
-        final String houseNumber = "3";
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.json");
-        mockRequest.setParameter("number", houseNumber);
+        mockRequest.setParameter("number", "3");
 
         // calling method
         processRequest(null, null, mockRequest, mockResponse);
@@ -334,13 +323,10 @@ public class ApiControllerTest extends AbstractWebTests {
             JsonMappingException, UnsupportedEncodingException, IOException, ServletException {
 
         // data preparing
-        final String zipCode = "postalCode";
-        final String houseNumber = "44";
-
         mockRequest.setMethod(RequestMethod.GET.name());
         mockRequest.setRequestURI("/api/address.json");
-        mockRequest.setParameter("zipcode", zipCode);
-        mockRequest.setParameter("number", houseNumber);
+        mockRequest.setParameter("zipcode", "postalCode");
+        mockRequest.setParameter("number", "44");
 
         // calling method
         processRequest(null, null, mockRequest, mockResponse);

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringNoExternalServiceTest;
 import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
 import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWithServer;
+import com.nedap.healthcare.kadasterbagclient.api.model.AbstractPersistedEntity;
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
@@ -30,6 +31,7 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringNoExtern
         // data preparation
         final String postalCode = "postcode3";
         final int number = 3;
+        final String extension = "a3";
 
         ServiceImpl.destroy();
 
@@ -38,7 +40,7 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringNoExtern
         // call method
         AddressDTO locationDto = null;
         try {
-            locationDto = locationService.getAddress(postalCode, number);
+            locationDto = locationService.getAddress(postalCode, number, extension);
             assertTrue(false);
         } catch (final FaildCommunicationWithServer ex) {
             assertTrue(true);
@@ -46,15 +48,16 @@ public class LocationServiceMissingWebServiceTest extends AbstractSpringNoExtern
 
         ServiceImpl.main(null);
 
-        locationDto = locationService.getAddress(postalCode, number);
+        locationDto = locationService.getAddress(postalCode, number, extension);
 
         // asserting
         final Address createdEntity = locationDao.findByCountryPostalCodeAndNumber(LocationService.NL_COUNTRY_CODE,
-                postalCode, number);
+                postalCode, number, extension);
 
-        assertObject(createdEntity, Property.notNull(Address.ID), Property.notNull(Address.CREATION_DATE),
+        assertObject(createdEntity, Property.notNull(AbstractPersistedEntity.ID),
+                Property.notNull(Address.CREATION_DATE),
                 Property.changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE),
-                Property.changed(Address.NUMBER, number), Property.nulll(Address.NUMBER_POSTFIX),
+                Property.changed(Address.NUMBER, number), Property.changed(Address.NUMBER_POSTFIX, extension),
                 Property.changed(Address.POSTAL_CODE, postalCode), Property.notNull(Address.LATITUDE),
                 Property.notNull(Address.LONGITUDE), Property.notNull(Address.VALID_FROM),
                 Property.nulll(Address.VALID_TO), Property.notNull(Address.CITY), Property.notNull(Address.STREET));
