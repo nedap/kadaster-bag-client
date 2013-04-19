@@ -110,7 +110,7 @@ class LocationServiceImpl implements LocationServiceHelper {
         final Long currentTime = new DateTime().getMillis();
 
         final Long difference = currentTime - creationTime;
-        return difference > maxValidPeriod * 1000;
+        return difference > maxValidPeriod.longValue() * 1000L;
     }
 
     @Override
