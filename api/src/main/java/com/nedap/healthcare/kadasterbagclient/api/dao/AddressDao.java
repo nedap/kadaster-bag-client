@@ -18,8 +18,10 @@ public interface AddressDao extends GenericDao<Address> {
      *            postal code
      * @param number
      *            house number
+     * @param extension
+     *            house number extension
      * @return {@link Address}
      */
-    Address findByCountryPostalCodeAndNumber(String countryCode, String postalCode, Integer number);
+    Address findByCountryPostalCodeAndNumber(String countryCode, String postalCode, Integer number, String extension);
 
 }

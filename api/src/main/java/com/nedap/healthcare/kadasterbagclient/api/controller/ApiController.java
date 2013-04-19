@@ -1,7 +1,5 @@
 package com.nedap.healthcare.kadasterbagclient.api.controller;
 
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.ApplicatieException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,8 @@ import com.nedap.healthcare.kadasterbagclient.api.exception.FaildCommunicationWi
 import com.nedap.healthcare.kadasterbagclient.api.exception.UnExistingLocation;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
 import com.nedap.healthcare.kadasterbagclient.api.service.LocationService;
+
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.ApplicatieException;
 
 /**
  * API controller, publish REST services for accessing geo coding data.
@@ -38,6 +38,8 @@ public class ApiController extends AbstractController {
      *            zip code
      * @param number
      *            house number
+     * @param extension
+     *            house number extension
      * @return matching {@link AddressDTO} object
      * @throws UnExistingLocation
      *             is thrown when no match is found
@@ -48,12 +50,13 @@ public class ApiController extends AbstractController {
     @RequestMapping(method = RequestMethod.GET, value = "address.xml", produces = MediaType.APPLICATION_XML_VALUE)
     public @ResponseBody
     AddressDTO addressXml(@RequestParam(value = "zipcode", required = true) final String zipCode,
-            @RequestParam(value = "number", required = true) final Integer number) throws UnExistingLocation,
-            FaildCommunicationWithServer, ApplicatieException {
+            @RequestParam(value = "number", required = true) final Integer number,
+            @RequestParam(value = "homeNumberExtension", required = false) final String extension)
+            throws UnExistingLocation, FaildCommunicationWithServer, ApplicatieException {
 
-        LOGGER.debug("Received xml request to location with %zipcode and %number", zipCode, number);
+        LOGGER.debug(String.format("Received xml request to location with %s, %s and %s", zipCode, number, extension));
 
-        return locationService.getAddress(zipCode, number);
+        return locationService.getAddress(zipCode, number, extension);
 
     }
 
@@ -64,6 +67,8 @@ public class ApiController extends AbstractController {
      *            zip code
      * @param number
      *            house number
+     * @param extension
+     *            house number extension
      * @return matching {@link AddressDTO} object
      * @throws UnExistingLocation
      *             is thrown when no match is found
@@ -74,12 +79,13 @@ public class ApiController extends AbstractController {
     @RequestMapping(method = RequestMethod.GET, value = "address.json", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     AddressDTO addressJson(@RequestParam(value = "zipcode", required = true) final String zipCode,
-            @RequestParam(value = "number", required = true) final Integer number) throws UnExistingLocation,
-            FaildCommunicationWithServer, ApplicatieException {
+            @RequestParam(value = "number", required = true) final Integer number,
+            @RequestParam(value = "homeNumberExtension", required = false) final String extension)
+            throws UnExistingLocation, FaildCommunicationWithServer, ApplicatieException {
 
-        LOGGER.debug("Received json request for address with %zipcode and %number", zipCode, number);
+        LOGGER.debug(String.format("Received xml request to location with %s, %s and %s", zipCode, number, extension));
 
-        return locationService.getAddress(zipCode, number);
+        return locationService.getAddress(zipCode, number, extension);
     }
 
 }

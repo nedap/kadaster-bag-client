@@ -1,10 +1,11 @@
 package com.nedap.healthcare.kadasterbagclient.api.service;
 
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
-import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901;
-
 import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
+
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.AntwoordberichtAPDADO;
+import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.IBagVsRaadplegenDatumADOV20090901;
+import nl.kadaster.schemas.imbag.apd.v20090901.Verblijfsobject;
 
 /**
  * {@link LocationService} extension with additional methods that are used inside inside implementation. This interface
@@ -30,7 +31,7 @@ interface LocationServiceHelper extends LocationService {
      *            to be processed
      * @return newly created {@link Address} object.
      */
-    Address convertAndSave(AntwoordberichtAPDADO kadasterLocation);
+    Address convertAndSave(Verblijfsobject kadasterLocation);
 
     /**
      * Check is difference between locations creation date and current date greater than allowed.
