@@ -1,8 +1,5 @@
 package com.nedap.healthcare.kadasterbagclient.api.controller;
 
-import static eu.execom.testutil.property.Property.changed;
-import static eu.execom.testutil.property.Property.notNull;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -19,19 +16,12 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.nedap.healthcare.kadasterbagclient.api.AbstractWebTests;
-import com.nedap.healthcare.kadasterbagclient.api.dao.AddressDao;
-import com.nedap.healthcare.kadasterbagclient.api.model.AbstractPersistedEntity;
-import com.nedap.healthcare.kadasterbagclient.api.model.Address;
 import com.nedap.healthcare.kadasterbagclient.api.model.AddressDTO;
-import com.nedap.healthcare.kadasterbagclient.api.service.LocationService;
 import com.nedap.healthcare.kadasterbagclient.service.ServiceImpl;
-
-import eu.execom.testutil.property.Property;
 
 /**
  * Testing api controller functionalities.
@@ -41,9 +31,6 @@ import eu.execom.testutil.property.Property;
 public class ApiControllerTest extends AbstractWebTests {
 
     private Unmarshaller um;
-
-    @Autowired
-    private AddressDao locationDao;
 
     final String zipCode = "7513KC";
     final Integer houseNumber = 4;
@@ -94,25 +81,8 @@ public class ApiControllerTest extends AbstractWebTests {
         final AddressDTO locationDto = (AddressDTO) um.unmarshal(new StringReader(responseContent));
         Assert.assertNotNull(locationDto);
 
-        final Address createdEntity = locationDao.findByCountryPostalCodeAndNumber(LocationService.NL_COUNTRY_CODE,
-                zipCode, houseNumber, extension);
-
-        assertObject(createdEntity, notNull(AbstractPersistedEntity.ID), notNull(Address.CREATION_DATE),
-                changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                changed(Address.NUMBER_POSTFIX, locationDto.getNumberPostfix()), changed(Address.POSTAL_CODE, zipCode),
-                notNull(Address.LATITUDE), notNull(Address.LONGITUDE), notNull(Address.VALID_FROM),
-                Property.nulll(Address.VALID_TO), notNull(Address.CITY), notNull(Address.STREET));
-
-        assertObject(locationDto, changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
-                changed(AddressDTO.NUMBER, createdEntity.getNumber()),
-                changed(AddressDTO.NUMBER_POSTFIX, createdEntity.getNumberPostfix()),
-                changed(AddressDTO.POSTAL_CODE, createdEntity.getPostalCode()),
-                changed(AddressDTO.LATITUDE, createdEntity.getLatitude()),
-                changed(AddressDTO.LONGITUDE, createdEntity.getLongitude()),
-                changed(AddressDTO.VALID_FROM, createdEntity.getValidFrom()),
-                changed(AddressDTO.VALID_TO, createdEntity.getValidTo()),
-                changed(AddressDTO.CITY, createdEntity.getCity()),
-                changed(AddressDTO.STREET, createdEntity.getStreet()));
+        Assert.assertEquals("52.20", locationDto.getLatitude().substring(0, 5));
+        Assert.assertEquals("4.39", locationDto.getLongitude().substring(0, 4));
     }
 
     /**
@@ -229,28 +199,8 @@ public class ApiControllerTest extends AbstractWebTests {
         final AddressDTO locationDto = mapper.readValue(responseContent, AddressDTO.class);
         Assert.assertNotNull(locationDto);
 
-        final Address createdEntity = locationDao.findByCountryPostalCodeAndNumber(LocationService.NL_COUNTRY_CODE,
-                zipCode, houseNumber, extension);
-
-        Assert.assertNotNull(createdEntity);
-
-        assertObject(createdEntity, notNull(AbstractPersistedEntity.ID),
-                changed(Address.COUNTRY_CODE, LocationService.NL_COUNTRY_CODE), changed(Address.NUMBER, houseNumber),
-                changed(Address.NUMBER_POSTFIX, locationDto.getNumberPostfix()), changed(Address.POSTAL_CODE, zipCode),
-                notNull(Address.CREATION_DATE), notNull(Address.LATITUDE), notNull(Address.LONGITUDE),
-                notNull(Address.VALID_FROM), Property.nulll(Address.VALID_TO), notNull(Address.CITY),
-                notNull(Address.STREET));
-
-        assertObject(locationDto, changed(AddressDTO.COUNTRY_CODE, createdEntity.getCountryCode()),
-                changed(AddressDTO.NUMBER, createdEntity.getNumber()),
-                changed(AddressDTO.NUMBER_POSTFIX, createdEntity.getNumberPostfix()),
-                changed(AddressDTO.POSTAL_CODE, createdEntity.getPostalCode()),
-                changed(AddressDTO.LATITUDE, createdEntity.getLatitude()),
-                changed(AddressDTO.LONGITUDE, createdEntity.getLongitude()),
-                changed(AddressDTO.VALID_FROM, createdEntity.getValidFrom()),
-                changed(AddressDTO.VALID_TO, createdEntity.getValidTo()),
-                changed(AddressDTO.CITY, createdEntity.getCity()),
-                changed(AddressDTO.STREET, createdEntity.getStreet()));
+        Assert.assertEquals("52.20", locationDto.getLatitude().substring(0, 5));
+        Assert.assertEquals("4.39", locationDto.getLongitude().substring(0, 4));
     }
 
     /**

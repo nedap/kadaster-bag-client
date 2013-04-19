@@ -1,5 +1,7 @@
 package com.nedap.healthcare.kadasterbagclient.api.util;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringTest;
@@ -10,7 +12,7 @@ import com.nedap.healthcare.kadasterbagclient.api.AbstractSpringTest;
  * @author Dusko Vesin
  * 
  */
-public class CoordinatesConverterUtilTest extends AbstractSpringTest {
+public class CoordinatesConverterUtilTest {
 
     /**
      * Testing {@link CoordinatesConverterUtil#transformRijksdriehoeksmetingToBassel(RDCoordinates)}.
@@ -25,8 +27,8 @@ public class CoordinatesConverterUtilTest extends AbstractSpringTest {
         BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(new RDCoordinates(
                 212345.678, 423456.789));
 
-        assertEquals(51.79681, bassel.getF(), 0.00001);
-        assertEquals(6.21852, bassel.getA(), 0.00001);
+        Assert.assertEquals(51.79681, bassel.getF(), 0.00001);
+        Assert.assertEquals(6.21852, bassel.getA(), 0.00001);
 
     }
     
@@ -36,8 +38,8 @@ public class CoordinatesConverterUtilTest extends AbstractSpringTest {
         BasselCoordinates bassel = CoordinatesConverterUtil.transformRijksdriehoeksmetingToBassel(new RDCoordinates(
                 257053.864, 470713.392));
          
-        assertEquals(52.21506, bassel.getF(), 0.00001);
-        assertEquals(6.88055, bassel.getA(), 0.00001);
+        Assert.assertEquals(52.21506, bassel.getF(), 0.00001);
+        Assert.assertEquals(6.88055, bassel.getA(), 0.00001);
 
     }
 }

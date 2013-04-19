@@ -3,7 +3,6 @@ package com.nedap.healthcare.kadasterbagclient.api;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * {@link AbstractKadasterBagClientRepositoryTest} with spring annotation and with transaction suppert.
@@ -11,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Dusko Vesin
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(AbstractKadasterBagClientRepositoryTest.TEXT_CONTEXT)
-@Transactional
-public abstract class AbstractSpringTest extends AbstractKadasterBagClientRepositoryTest {
-
+@ContextConfiguration(AbstractSpringTest.TEXT_CONTEXT)
+public abstract class AbstractSpringTest {
+	public static final String TEXT_CONTEXT = "/META-INF/service-test-context.xml";
 }

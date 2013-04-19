@@ -13,13 +13,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd ">
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath*:db_test.properties</value>
 				<value>classpath*:geocoding_test.properties</value>
 			</list>
 		</property>
 	</bean>
 
-	<import resource="classpath*:META-INF/persistenceContext.xml" />
 	<import resource="classpath*:META-INF/servletContext.xml" />
     <import resource="missingServiceTestContext.xml" />
 

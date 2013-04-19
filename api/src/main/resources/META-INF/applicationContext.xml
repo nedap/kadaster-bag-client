@@ -14,13 +14,11 @@ http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd ">
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>file:///${GEO_CODING_HOME}/db.properties</value>
 				<value>file:///${GEO_CODING_HOME}/geocoding.properties</value>
 			</list>
 		</property>
 	</bean>
 	
-	<import resource="classpath*:META-INF/persistenceContext.xml" />
 	<import resource="classpath*:META-INF/servletContext.xml" />
     <import resource="classpath*:META-INF/serviceContext.xml" />
 

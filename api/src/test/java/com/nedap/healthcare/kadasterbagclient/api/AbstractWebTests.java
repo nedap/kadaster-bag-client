@@ -16,7 +16,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.AbstractController;
@@ -29,11 +28,10 @@ import org.springframework.web.servlet.mvc.AbstractController;
 @MockWebApplication(name = "some-controller", locations = AbstractWebTests.TEST_CONTEXT)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = MockWebApplicationContextLoader.class)
-@Transactional
-public abstract class AbstractWebTests extends AbstractKadasterBagClientRepositoryTest {
+public abstract class AbstractWebTests {
 
     // Necessary constant tweak
-    static final String TEST_CONTEXT = AbstractKadasterBagClientRepositoryTest.TEXT_CONTEXT;
+    static final String TEST_CONTEXT = AbstractSpringTest.TEXT_CONTEXT;
 
     @Autowired
     private DispatcherServlet servlet;
