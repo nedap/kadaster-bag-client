@@ -1,5 +1,7 @@
 package com.nedap.healthcare.kadasterbagclient.api.service;
 
+import java.util.regex.Pattern;
+
 import javax.validation.constraints.NotNull;
 import javax.xml.ws.WebServiceException;
 
@@ -127,7 +129,12 @@ class LocationServiceImpl implements LocationServiceHelper {
         final NUMPostcodeAdres numPostcodeAdres = new NUMPostcodeAdres();
         numPostcodeAdres.setHuisnummer(houseNumber);
         numPostcodeAdres.setPostcode(zipCode);
-        numPostcodeAdres.setHuisnummertoevoeging(extension);
+        
+        if (extension != null && isSingleLetter(extension)) {
+        	numPostcodeAdres.setHuisletter(extension);
+        } else {
+        	numPostcodeAdres.setHuisnummertoevoeging(extension);
+        }
 
         final VraagberichtAPDADOAdres.Vraag vraag = new VraagberichtAPDADOAdres.Vraag();
         vraag.setNUMPostcodeAdres(numPostcodeAdres);
@@ -139,7 +146,11 @@ class LocationServiceImpl implements LocationServiceHelper {
         return result;
     }
 
-    @Override
+    private boolean isSingleLetter(String extension) {
+    	return extension.matches("\\p{L}");
+	}
+
+	@Override
     public IBagVsRaadplegenDatumADOV20090901 getWSClient() {
         return clientService;
     }
