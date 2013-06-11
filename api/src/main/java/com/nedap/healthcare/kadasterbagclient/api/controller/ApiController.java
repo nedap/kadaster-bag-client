@@ -23,7 +23,7 @@ import nl.kadaster.schemas.bag_verstrekkingen.bevragingen_apd.v20090901.Applicat
  * @author Dusko Vesin
  */
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/")
 public class ApiController extends AbstractController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiController.class);
@@ -86,6 +86,14 @@ public class ApiController extends AbstractController {
         LOGGER.debug(String.format("Received xml request to location with %s, %s and %s", zipCode, number, extension));
 
         return locationService.getAddress(zipCode, number, extension);
+    }
+    
+    /**
+     * Status service, something used by Nedap
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "status", produces= MediaType.TEXT_PLAIN_VALUE)
+    public @ResponseBody String status() {
+    	return "OK";
     }
 
 }

@@ -81,7 +81,7 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // data preparing
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.xml");
+        mockRequest.setRequestURI("/address.xml");
         mockRequest.setParameter("zipcode", zipCode);
         mockRequest.setParameter("number", houseNumber.toString());
 
@@ -133,7 +133,7 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // data preparing
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.xml");
+        mockRequest.setRequestURI("/address.xml");
         mockRequest.setParameter("zipcode", "postalCode3");
 
         // calling method
@@ -161,7 +161,7 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // data preparing
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.xml");
+        mockRequest.setRequestURI("/address.xml");
         mockRequest.setParameter("number", "3");
 
         // calling method
@@ -189,7 +189,7 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // data preparing
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.xml");
+        mockRequest.setRequestURI("/address.xml");
         mockRequest.setParameter("zipcode", "postalCode");
         mockRequest.setParameter("number", "44");
 
@@ -216,7 +216,7 @@ public class ApiControllerTest extends AbstractWebTests {
             UnsupportedEncodingException, IOException, ServletException {
 
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.json");
+        mockRequest.setRequestURI("/address.json");
         mockRequest.setParameter("zipcode", zipCode);
         mockRequest.setParameter("number", houseNumber.toString());
 
@@ -270,7 +270,7 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // data preparing
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.json");
+        mockRequest.setRequestURI("/address.json");
         mockRequest.setParameter("zipcode", "postalCode3");
 
         // calling method
@@ -297,7 +297,7 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // data preparing
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.json");
+        mockRequest.setRequestURI("/address.json");
         mockRequest.setParameter("number", "3");
 
         // calling method
@@ -324,7 +324,7 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // data preparing
         mockRequest.setMethod(RequestMethod.GET.name());
-        mockRequest.setRequestURI("/api/address.json");
+        mockRequest.setRequestURI("/address.json");
         mockRequest.setParameter("zipcode", "postalCode");
         mockRequest.setParameter("number", "44");
 
@@ -333,6 +333,22 @@ public class ApiControllerTest extends AbstractWebTests {
 
         // asserting
         Assert.assertEquals(HttpStatus.NOT_FOUND.value(), mockResponse.getStatus());
+    }
+    
+    @Test
+    public void testStatus() throws JsonGenerationException, JsonMappingException,
+            UnsupportedEncodingException, IOException, ServletException, JAXBException {
+
+        // data preparing
+        mockRequest.setMethod(RequestMethod.GET.name());
+        mockRequest.setRequestURI("/status");
+        
+        // calling method
+        final String responseContent = processRequest(null, null, mockRequest, mockResponse);
+
+        // asserting
+        Assert.assertEquals(HttpStatus.OK.value(), mockResponse.getStatus());
+        Assert.assertEquals("OK", responseContent);
     }
 
 }
